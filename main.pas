@@ -20,18 +20,19 @@ type
     groupBoxSelectWells: TGroupBox;
     cmdSelectSrcDir: TButton;
     cmdSelectDestDir: TButton;
-    Label1SrcDir: TLabel;
-    Label1SrcDir1: TLabel;
+    lblSrcDir: TLabel;
+    lblDestDir: TLabel;
     lstWells: TListBox;
     lstExperiments: TListBox;
     dlgSelectDestDir: TSelectDirectoryDialog;
     progressConversion: TProgressBar;
-    SelectExperimenLabel: TLabel;
+    lblSelectExperimen: TLabel;
     dlgSelectSrcDir: TSelectDirectoryDialog;
     procedure chkSelectWellsChange(Sender: TObject);
-    procedure txtSourceDirChange(Sender: TObject);
+    procedure cmdSelectDestDirClick(Sender: TObject);
+    procedure txtDestDirChange(Sender: TObject);
+    procedure txtSourceDirectoryChange(Sender: TObject);
     procedure cmdSelectSrcDirClick(Sender: TObject);
-    procedure Label1SrcDirClick(Sender: TObject);
     procedure lstExperimentsSelectionChange(Sender: TObject; User: boolean);
   private
     { private declarations }
@@ -47,19 +48,6 @@ implementation
 {$R *.lfm}
 
 { TMainForm }
-
-procedure TMainForm.cmdSelectSrcDirClick(Sender: TObject);
-begin
-  if dlgSelectSrcDir.Execute then
-  begin
-    txtSourceDir.Text:=dlgSelectSrcDir.FileName;
-  end;
-end;
-
-procedure TMainForm.Label1SrcDirClick(Sender: TObject);
-begin
-
-end;
 
 procedure TMainForm.lstExperimentsSelectionChange(Sender: TObject;
   User: boolean);
@@ -97,7 +85,7 @@ begin
     lstWells.AddItem(SysUtils.ExtractFileName(Well), Sender);
 end;
 
-procedure TMainForm.txtSourceDirChange(Sender: TObject);
+procedure TMainForm.txtSourceDirectoryChange(Sender: TObject);
 var
   Exp: String;
   Experiments: TStringList;
@@ -105,12 +93,30 @@ begin
   lstExperiments.Clear;
   if SysUtils.DirectoryExists(txtSourceDir.Text) then
   begin
+    // Enable the edit box
+    txtSourceDir.Enabled := True;
+    // Populate experiments listbox based on selected directory
     Experiments := FileUtil.FindAllDirectories(txtSourceDir.Text, False);
     lstExperiments.Clear;
     for Exp in Experiments do
-        // Populate experiments listbox
       lstExperiments.AddItem(SysUtils.ExtractFileName(Exp),Sender);
   end;
+end;
+
+procedure TMainForm.cmdSelectSrcDirClick(Sender: TObject);
+begin
+  if dlgSelectSrcDir.Execute then
+  begin
+    txtSourceDir.Text := dlgSelectSrcDir.FileName;
+  end;
+end;
+
+procedure TMainForm.cmdSelectDestDirClick(Sender: TObject);
+begin
+    if dlgSelectDestDir.Execute then
+    begin
+      txtDestDir.Text := dlgSelectDestDir.FileName;
+    end;
 end;
 
 procedure TMainForm.chkSelectWellsChange(Sender: TObject);
@@ -119,6 +125,11 @@ begin
     groupBoxSelectWells.Enabled := False
   else
     groupBoxSelectWells.Enabled := True
+end;
+
+procedure TMainForm.txtDestDirChange(Sender: TObject);
+begin
+  txtDestDir.Enabled := True;
 end;
 
 end.

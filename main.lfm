@@ -21,15 +21,16 @@ object MainForm: TMainForm
     Height = 25
     Top = 40
     Width = 664
+    Enabled = False
     Font.Height = -12
     Font.Name = 'Sans'
-    OnChange = txtSourceDirChange
+    OnChange = txtSourceDirectoryChange
     ParentFont = False
     ReadOnly = True
     TabOrder = 1
     Text = 'Source folder'
   end
-  object Label1SrcDir: TLabel
+  object lblSrcDir: TLabel
     Left = 16
     Height = 19
     Top = 22
@@ -39,9 +40,8 @@ object MainForm: TMainForm
     Font.Name = 'Sans'
     ParentColor = False
     ParentFont = False
-    OnClick = Label1SrcDirClick
   end
-  object SelectExperimenLabel: TLabel
+  object lblSelectExperimen: TLabel
     Left = 16
     Height = 19
     Top = 72
@@ -51,7 +51,6 @@ object MainForm: TMainForm
     Font.Name = 'Sans'
     ParentColor = False
     ParentFont = False
-    OnClick = Label1SrcDirClick
   end
   object lstExperiments: TListBox
     Left = 16
@@ -107,12 +106,13 @@ object MainForm: TMainForm
     Enabled = False
     Font.Height = -12
     Font.Name = 'Sans'
-    OnChange = txtSourceDirChange
+    OnChange = txtDestDirChange
     ParentFont = False
+    ReadOnly = True
     TabOrder = 5
     Text = 'Destination folder'
   end
-  object Label1SrcDir1: TLabel
+  object lblDestDir: TLabel
     Left = 16
     Height = 19
     Top = 376
@@ -122,7 +122,6 @@ object MainForm: TMainForm
     Font.Name = 'Sans'
     ParentColor = False
     ParentFont = False
-    OnClick = Label1SrcDirClick
   end
   object cmdSelectDestDir: TButton
     Left = 680
@@ -130,7 +129,7 @@ object MainForm: TMainForm
     Top = 394
     Width = 64
     Caption = 'Select'
-    OnClick = cmdSelectSrcDirClick
+    OnClick = cmdSelectDestDirClick
     TabOrder = 6
   end
   object cmdStartConversion: TButton
