@@ -1,0 +1,71 @@
+object Form1: TForm1
+  Left = 524
+  Height = 509
+  Top = 236
+  Width = 752
+  Caption = 'MDC File Export Tool'
+  ClientHeight = 509
+  ClientWidth = 752
+  LCLVersion = '1.0.10.0'
+  object InputDir: TButton
+    Left = 680
+    Height = 25
+    Top = 40
+    Width = 64
+    Caption = 'Select'
+    OnClick = InputDirClick
+    TabOrder = 0
+  end
+  object EditSourceDir: TEdit
+    Left = 16
+    Height = 25
+    Top = 40
+    Width = 664
+    Enabled = False
+    Font.Height = -12
+    Font.Name = 'Sans'
+    OnChange = EditSourceDirChange
+    ParentFont = False
+    TabOrder = 1
+    Text = 'Source directory'
+  end
+  object Label1SrcDir: TLabel
+    Left = 16
+    Height = 19
+    Top = 22
+    Width = 109
+    Caption = 'Source Folder:'
+    Font.Height = -15
+    Font.Name = 'Sans'
+    ParentColor = False
+    ParentFont = False
+    OnClick = Label1SrcDirClick
+  end
+  object SelectExperimenLabel: TLabel
+    Left = 16
+    Height = 19
+    Top = 72
+    Width = 164
+    Caption = 'Select Experiment(s):'
+    Font.Height = -15
+    Font.Name = 'Sans'
+    ParentColor = False
+    ParentFont = False
+    OnClick = Label1SrcDirClick
+  end
+  object ListBoxExperiments: TListBox
+    Left = 16
+    Height = 104
+    Top = 96
+    Width = 664
+    ItemHeight = 0
+    MultiSelect = True
+    ScrollWidth = 662
+    TabOrder = 2
+    TopIndex = -1
+  end
+  object SelectDirectoryDialog1: TSelectDirectoryDialog
+    InitialDir = '~/'
+    left = 568
+  end
+end
