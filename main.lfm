@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 524
+  Left = 458
   Height = 477
-  Top = 236
+  Top = 114
   Width = 750
   Caption = 'MDC File Export Tool'
   ClientHeight = 477
@@ -28,7 +28,6 @@ object MainForm: TMainForm
     ParentFont = False
     ReadOnly = True
     TabOrder = 1
-    Text = 'Source folder'
   end
   object lblSrcDir: TLabel
     Left = 16
@@ -113,7 +112,6 @@ object MainForm: TMainForm
     ParentFont = False
     ReadOnly = True
     TabOrder = 5
-    Text = 'Destination folder'
   end
   object lblDestDir: TLabel
     Left = 16
@@ -141,6 +139,7 @@ object MainForm: TMainForm
     Top = 432
     Width = 152
     Caption = 'Start conversion'
+    OnClick = cmdStartConversionClick
     TabOrder = 7
   end
   object progressConversion: TProgressBar

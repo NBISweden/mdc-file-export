@@ -30,6 +30,7 @@ type
     dlgSelectSrcDir: TSelectDirectoryDialog;
     procedure chkSelectWellsChange(Sender: TObject);
     procedure cmdSelectDestDirClick(Sender: TObject);
+    procedure cmdStartConversionClick(Sender: TObject);
     procedure txtDestDirChange(Sender: TObject);
     procedure txtSourceDirectoryChange(Sender: TObject);
     procedure cmdSelectSrcDirClick(Sender: TObject);
@@ -141,5 +142,31 @@ begin
   txtDestDir.Enabled := True;
 end;
 
-end.
+procedure TMainForm.cmdStartConversionClick(Sender: TObject);
+begin
+  // TODO: Add various checks
 
+  // Check if source and destination paths are the same
+  if Pos(txtSourceDir.Text, txtDestDir.Text) > 0 then
+  begin
+    ShowMessage('The destination directory must not be placed under the ' +
+                'Source directory!');
+    exit;
+  end;
+
+  if Length(txtSourceDir.Text) = 0 then
+  begin
+    ShowMessage('Source directory is empty!');
+    exit;
+  end;
+
+  if Length(txtDestDir.Text) = 0 then
+  begin
+    ShowMessage('Destination directory is empty!');
+    exit;
+  end;
+
+  ShowMessage('Starting to process...'); // TODO: Implement processing here ...
+end;
+
+end.
