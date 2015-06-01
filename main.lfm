@@ -1,10 +1,10 @@
 object Form1: TForm1
   Left = 524
-  Height = 509
+  Height = 501
   Top = 236
   Width = 752
   Caption = 'MDC File Export Tool'
-  ClientHeight = 509
+  ClientHeight = 501
   ClientWidth = 752
   LCLVersion = '1.0.10.0'
   object InputDir: TButton
@@ -21,13 +21,13 @@ object Form1: TForm1
     Height = 25
     Top = 40
     Width = 664
-    Enabled = False
     Font.Height = -12
     Font.Name = 'Sans'
     OnChange = EditSourceDirChange
     ParentFont = False
+    ReadOnly = True
     TabOrder = 1
-    Text = 'Source directory'
+    Text = 'Source folder'
   end
   object Label1SrcDir: TLabel
     Left = 16
@@ -58,14 +58,109 @@ object Form1: TForm1
     Height = 104
     Top = 96
     Width = 664
+    Font.Height = -12
+    Font.Name = 'Sans'
     ItemHeight = 0
     MultiSelect = True
+    ParentFont = False
     ScrollWidth = 662
     TabOrder = 2
     TopIndex = -1
   end
-  object SelectDirectoryDialog1: TSelectDirectoryDialog
+  object CheckBox1: TCheckBox
+    Left = 16
+    Height = 24
+    Top = 208
+    Width = 182
+    Caption = 'Select specific wells'
+    OnChange = CheckBox1Change
+    TabOrder = 3
+  end
+  object GroupBox1: TGroupBox
+    Left = 16
+    Height = 141
+    Top = 232
+    Width = 664
+    Caption = 'Select wells'
+    ClientHeight = 117
+    ClientWidth = 660
+    Enabled = False
+    TabOrder = 4
+    object ListBox1: TListBox
+      Left = 6
+      Height = 104
+      Top = 7
+      Width = 648
+      Enabled = False
+      ItemHeight = 0
+      ScrollWidth = 646
+      TabOrder = 0
+      TopIndex = -1
+    end
+  end
+  object EditSourceDir1: TEdit
+    Left = 16
+    Height = 25
+    Top = 394
+    Width = 664
+    Enabled = False
+    Font.Height = -12
+    Font.Name = 'Sans'
+    OnChange = EditSourceDirChange
+    ParentFont = False
+    TabOrder = 5
+    Text = 'Destination folder'
+  end
+  object Label1SrcDir1: TLabel
+    Left = 16
+    Height = 19
+    Top = 376
+    Width = 144
+    Caption = 'Destination Folder:'
+    Font.Height = -15
+    Font.Name = 'Sans'
+    ParentColor = False
+    ParentFont = False
+    OnClick = Label1SrcDirClick
+  end
+  object InputDir1: TButton
+    Left = 680
+    Height = 25
+    Top = 394
+    Width = 64
+    Caption = 'Select'
+    OnClick = InputDirClick
+    TabOrder = 6
+  end
+  object Button1: TButton
+    Left = 528
+    Height = 33
+    Top = 432
+    Width = 152
+    Caption = 'Start conversion'
+    TabOrder = 7
+  end
+  object ProgressBar1: TProgressBar
+    Left = 16
+    Height = 31
+    Top = 432
+    Width = 512
+    TabOrder = 8
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 26
+    Top = 475
+    Width = 752
+    Panels = <>
+  end
+  object dlgSelectSrcDir: TSelectDirectoryDialog
     InitialDir = '~/'
     left = 568
+  end
+  object dlgSelectDestDir: TSelectDirectoryDialog
+    InitialDir = '~/'
+    left = 568
+    top = 360
   end
 end

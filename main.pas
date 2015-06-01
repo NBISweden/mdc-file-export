@@ -13,13 +13,24 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    Button1: TButton;
+    CheckBox1: TCheckBox;
     EditSourceDir: TEdit;
+    EditSourceDir1: TEdit;
     Experiments: TStringList;
+    GroupBox1: TGroupBox;
     InputDir: TButton;
+    InputDir1: TButton;
     Label1SrcDir: TLabel;
+    Label1SrcDir1: TLabel;
+    ListBox1: TListBox;
     ListBoxExperiments: TListBox;
+    dlgSelectDestDir: TSelectDirectoryDialog;
+    ProgressBar1: TProgressBar;
     SelectExperimenLabel: TLabel;
-    SelectDirectoryDialog1: TSelectDirectoryDialog;
+    dlgSelectSrcDir: TSelectDirectoryDialog;
+    StatusBar1: TStatusBar;
+    procedure CheckBox1Change(Sender: TObject);
     procedure EditSourceDirChange(Sender: TObject);
     procedure InputDirClick(Sender: TObject);
     procedure Label1SrcDirClick(Sender: TObject);
@@ -40,9 +51,9 @@ implementation
 
 procedure TForm1.InputDirClick(Sender: TObject);
 begin
-  if SelectDirectoryDialog1.Execute then
+  if dlgSelectSrcDir.Execute then
   begin
-    EditSourceDir.Text:=SelectDirectoryDialog1.FileName;
+    EditSourceDir.Text:=dlgSelectSrcDir.FileName;
   end;
 end;
 
@@ -63,6 +74,11 @@ begin
     For Exp in Experiments do
         ListBoxExperiments.AddItem(SysUtils.ExtractFileName(Exp),Sender);
   end;
+end;
+
+procedure TForm1.CheckBox1Change(Sender: TObject);
+begin
+
 end;
 
 end.
