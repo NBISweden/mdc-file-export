@@ -10,29 +10,29 @@ uses
 
 type
 
-  { TForm1 }
+  { TMainForm }
 
-  TForm1 = class(TForm)
-    Button1: TButton;
-    CheckBox1: TCheckBox;
-    EditSourceDir: TEdit;
-    EditSourceDir1: TEdit;
-    GroupBox1: TGroupBox;
-    InputDir: TButton;
-    InputDir1: TButton;
+  TMainForm = class(TForm)
+    cmdStartConversion: TButton;
+    chkSelectWells: TCheckBox;
+    txtSourceDir: TEdit;
+    txtDestDir: TEdit;
+    groupBoxSelectWells: TGroupBox;
+    cmdSelectSrcDir: TButton;
+    cmdSelectDestDir: TButton;
     Label1SrcDir: TLabel;
     Label1SrcDir1: TLabel;
-    ListBoxWells: TListBox;
-    ListBoxExperiments: TListBox;
+    lstWells: TListBox;
+    lstExperiments: TListBox;
     dlgSelectDestDir: TSelectDirectoryDialog;
-    ProgressBar1: TProgressBar;
+    progressConversion: TProgressBar;
     SelectExperimenLabel: TLabel;
     dlgSelectSrcDir: TSelectDirectoryDialog;
-    procedure CheckBox1Change(Sender: TObject);
-    procedure EditSourceDirChange(Sender: TObject);
-    procedure InputDirClick(Sender: TObject);
+    procedure chkSelectWellsChange(Sender: TObject);
+    procedure txtSourceDirChange(Sender: TObject);
+    procedure cmdSelectSrcDirClick(Sender: TObject);
     procedure Label1SrcDirClick(Sender: TObject);
-    procedure ListBoxExperimentsSelectionChange(Sender: TObject; User: boolean);
+    procedure lstExperimentsSelectionChange(Sender: TObject; User: boolean);
   private
     { private declarations }
   public
@@ -40,28 +40,28 @@ type
   end;
 
 var
-  Form1: TForm1;
+  MainForm: TMainForm;
 
 implementation
 
 {$R *.lfm}
 
-{ TForm1 }
+{ TMainForm }
 
-procedure TForm1.InputDirClick(Sender: TObject);
+procedure TMainForm.cmdSelectSrcDirClick(Sender: TObject);
 begin
   if dlgSelectSrcDir.Execute then
   begin
-    EditSourceDir.Text:=dlgSelectSrcDir.FileName;
+    txtSourceDir.Text:=dlgSelectSrcDir.FileName;
   end;
 end;
 
-procedure TForm1.Label1SrcDirClick(Sender: TObject);
+procedure TMainForm.Label1SrcDirClick(Sender: TObject);
 begin
 
 end;
 
-procedure TForm1.ListBoxExperimentsSelectionChange(Sender: TObject;
+procedure TMainForm.lstExperimentsSelectionChange(Sender: TObject;
   User: boolean);
 var
   ExperimentDirs: TStringList;
@@ -71,36 +71,39 @@ var
   ExperimentDir: String;
   i: Integer;
 begin
-  ListBoxWells.Clear;
+  lstWells.Clear;
   ExperimentDirs := TStringList.Create;
-  for i:=0 to ListBoxExperiments.Items.Count-1 do
-      if ListBoxExperiments.Selected[i] then
-         Experiment := ListBoxExperiments.Items[i];
-         ExperimentDir := EditSourceDir.Text + SysUtils.PathDelim + Experiment;
+  for i:=0 to lstExperiments.Items.Count-1 do
+      // Process only the selected items in the experiments listbox
+      if lstExperiments.Selected[i] then
+         Experiment := lstExperiments.Items[i];
+         // Construct the full path to experiment folder
+         ExperimentDir := txtSourceDir.Text + SysUtils.PathDelim + Experiment;
          ExperimentDirs.Add(ExperimentDir);
   Wells := TStringList.Create;
   For ExperimentDir in ExperimentDirs do
       Wells.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
+  // Populate the wells listbox
   For Well in Wells do
-      ListBoxWells.AddItem(SysUtils.ExtractFileName(Well), Sender);
+      lstWells.AddItem(SysUtils.ExtractFileName(Well), Sender);
 end;
 
-procedure TForm1.EditSourceDirChange(Sender: TObject);
+procedure TMainForm.txtSourceDirChange(Sender: TObject);
 var
   Exp: String;
   Experiments: TStringList;
 begin
-  ListBoxExperiments.Clear;
-  if SysUtils.DirectoryExists(EditSourceDir.Text) then
+  lstExperiments.Clear;
+  if SysUtils.DirectoryExists(txtSourceDir.Text) then
   begin
-    Experiments := FileUtil.FindAllDirectories(EditSourceDir.Text, False);
-    ListBoxExperiments.Clear;
+    Experiments := FileUtil.FindAllDirectories(txtSourceDir.Text, False);
+    lstExperiments.Clear;
     For Exp in Experiments do
-        ListBoxExperiments.AddItem(SysUtils.ExtractFileName(Exp),Sender);
+        lstExperiments.AddItem(SysUtils.ExtractFileName(Exp),Sender);
   end;
 end;
 
-procedure TForm1.CheckBox1Change(Sender: TObject);
+procedure TMainForm.chkSelectWellsChange(Sender: TObject);
 begin
 
 end;

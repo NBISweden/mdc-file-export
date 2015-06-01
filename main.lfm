@@ -1,4 +1,4 @@
-object Form1: TForm1
+object MainForm: TMainForm
   Left = 524
   Height = 477
   Top = 236
@@ -7,23 +7,23 @@ object Form1: TForm1
   ClientHeight = 477
   ClientWidth = 750
   LCLVersion = '1.0.10.0'
-  object InputDir: TButton
+  object cmdSelectSrcDir: TButton
     Left = 680
     Height = 25
     Top = 40
     Width = 64
     Caption = 'Select'
-    OnClick = InputDirClick
+    OnClick = cmdSelectSrcDirClick
     TabOrder = 0
   end
-  object EditSourceDir: TEdit
+  object txtSourceDir: TEdit
     Left = 16
     Height = 25
     Top = 40
     Width = 664
     Font.Height = -12
     Font.Name = 'Sans'
-    OnChange = EditSourceDirChange
+    OnChange = txtSourceDirChange
     ParentFont = False
     ReadOnly = True
     TabOrder = 1
@@ -53,7 +53,7 @@ object Form1: TForm1
     ParentFont = False
     OnClick = Label1SrcDirClick
   end
-  object ListBoxExperiments: TListBox
+  object lstExperiments: TListBox
     Left = 16
     Height = 104
     Top = 96
@@ -62,22 +62,22 @@ object Form1: TForm1
     Font.Name = 'Sans'
     ItemHeight = 0
     MultiSelect = True
-    OnSelectionChange = ListBoxExperimentsSelectionChange
+    OnSelectionChange = lstExperimentsSelectionChange
     ParentFont = False
     ScrollWidth = 662
     TabOrder = 2
     TopIndex = -1
   end
-  object CheckBox1: TCheckBox
+  object chkSelectWells: TCheckBox
     Left = 16
     Height = 24
     Top = 208
     Width = 182
     Caption = 'Select specific wells'
-    OnChange = CheckBox1Change
+    OnChange = chkSelectWellsChange
     TabOrder = 3
   end
-  object GroupBox1: TGroupBox
+  object groupBoxSelectWells: TGroupBox
     Left = 16
     Height = 141
     Top = 232
@@ -87,7 +87,7 @@ object Form1: TForm1
     ClientWidth = 660
     Enabled = False
     TabOrder = 4
-    object ListBoxWells: TListBox
+    object lstWells: TListBox
       Left = 6
       Height = 104
       Top = 7
@@ -99,7 +99,7 @@ object Form1: TForm1
       TopIndex = -1
     end
   end
-  object EditSourceDir1: TEdit
+  object txtDestDir: TEdit
     Left = 16
     Height = 25
     Top = 394
@@ -107,7 +107,7 @@ object Form1: TForm1
     Enabled = False
     Font.Height = -12
     Font.Name = 'Sans'
-    OnChange = EditSourceDirChange
+    OnChange = txtSourceDirChange
     ParentFont = False
     TabOrder = 5
     Text = 'Destination folder'
@@ -124,16 +124,16 @@ object Form1: TForm1
     ParentFont = False
     OnClick = Label1SrcDirClick
   end
-  object InputDir1: TButton
+  object cmdSelectDestDir: TButton
     Left = 680
     Height = 25
     Top = 394
     Width = 64
     Caption = 'Select'
-    OnClick = InputDirClick
+    OnClick = cmdSelectSrcDirClick
     TabOrder = 6
   end
-  object Button1: TButton
+  object cmdStartConversion: TButton
     Left = 528
     Height = 33
     Top = 432
@@ -141,7 +141,7 @@ object Form1: TForm1
     Caption = 'Start conversion'
     TabOrder = 7
   end
-  object ProgressBar1: TProgressBar
+  object progressConversion: TProgressBar
     Left = 16
     Height = 31
     Top = 432
