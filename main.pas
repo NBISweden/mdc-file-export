@@ -78,21 +78,23 @@ begin
   lstWells.Clear;
   ExperimentDirs := TStringList.Create;
   for i:=0 to lstExperiments.Items.Count-1 do
-      // Process only the selected items in the experiments listbox
-      if lstExperiments.Selected[i] then
-         Experiment := lstExperiments.Items[i];
-         // Construct the full path to experiment folder
-         ExperimentDir := txtSourceDir.Text + SysUtils.PathDelim + Experiment;
-         ExperimentDirs.Add(ExperimentDir);
+    // Process only the selected items in the experiments listbox
+    if lstExperiments.Selected[i] then
+      Experiment := lstExperiments.Items[i];
+      // Construct the full path to experiment folder
+      ExperimentDir := txtSourceDir.Text + SysUtils.PathDelim + Experiment;
+      ExperimentDirs.Add(ExperimentDir);
   DateDirs := TStringList.Create;
   for ExperimentDir in ExperimentDirs do
-      DateDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
+    DateDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
   // Populate the wells listbox
   Wells := TStringList.Create;
-  for DateDir in DateDirs do
-      Wells.AddStrings(FileUtil.FindAllDirectories(DateDir, False));
+  // Loop down into the date folders, to retrieve the well folders
+  for DateDir in DateDirs do // TODO: Add validation of date pattern
+    Wells.AddStrings(FileUtil.FindAllDirectories(DateDir, False));
+  // Populate wells listbox with the wells (TODO: Use more than well no as ID?)
   for Well in Wells do
-      lstWells.AddItem(SysUtils.ExtractFileName(Well), Sender);
+    lstWells.AddItem(SysUtils.ExtractFileName(Well), Sender);
 end;
 
 procedure TMainForm.txtSourceDirChange(Sender: TObject);
@@ -106,13 +108,17 @@ begin
     Experiments := FileUtil.FindAllDirectories(txtSourceDir.Text, False);
     lstExperiments.Clear;
     for Exp in Experiments do
-        lstExperiments.AddItem(SysUtils.ExtractFileName(Exp),Sender);
+        // Populate experiments listbox
+      lstExperiments.AddItem(SysUtils.ExtractFileName(Exp),Sender);
   end;
 end;
 
 procedure TMainForm.chkSelectWellsChange(Sender: TObject);
 begin
-
+  if groupBoxSelectWells.Enabled then
+    groupBoxSelectWells.Enabled := False
+  else
+    groupBoxSelectWells.Enabled := True
 end;
 
 end.

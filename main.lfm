@@ -92,8 +92,8 @@ object MainForm: TMainForm
       Height = 104
       Top = 7
       Width = 648
-      Enabled = False
       ItemHeight = 0
+      MultiSelect = True
       ScrollWidth = 646
       TabOrder = 0
       TopIndex = -1
