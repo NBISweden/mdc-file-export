@@ -57,32 +57,41 @@ var
   Experiment: String;
   DateDirs: TStringList;
   DateDir: String;
-  Dates: TStringList;
-  Date: String;
   Well: String;
-  Wells: TStringList;
   i: Integer;
 begin
   lstWells.Clear;
+
   ExperimentDirs := TStringList.Create;
   for i:=0 to lstExperiments.Items.Count-1 do
+  begin
     // Process only the selected items in the experiments listbox
     if lstExperiments.Selected[i] then
+    begin
       Experiment := lstExperiments.Items[i];
       // Construct the full path to experiment folder
       ExperimentDir := txtSourceDir.Text + SysUtils.PathDelim + Experiment;
-      ExperimentDirs.Add(ExperimentDir);
+      ExperimentDirs.Append(ExperimentDir);
+    end;
+  end;
+
   DateDirs := TStringList.Create;
   for ExperimentDir in ExperimentDirs do
+  begin
+    Experiment := SysUtils.ExtractFileName(ExperimentDir);
+    DateDirs.Clear;
     DateDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
-  // Populate the wells listbox
-  Wells := TStringList.Create;
-  // Loop down into the date folders, to retrieve the well folders
-  for DateDir in DateDirs do // TODO: Add validation of date pattern
-    Wells.AddStrings(FileUtil.FindAllDirectories(DateDir, False));
-  // Populate wells listbox with the wells (TODO: Use more than well no as ID?)
-  for Well in Wells do
-    lstWells.AddItem(SysUtils.ExtractFileName(Well), Sender);
+    // Populate the wells listbox
+    // Loop down into the date folders, to retrieve the well folders
+    for DateDir in DateDirs do // TODO: Add validation of date pattern
+    begin
+      // Populate wells listbox with the wells (TODO: Use more than well no as ID?)
+      for Well in FileUtil.FindAllDirectories(DateDir, False) do
+      begin
+        lstWells.AddItem(SysUtils.ExtractFileName(Well) + ' (' + Experiment + ')', Sender);
+      end;
+    end;
+  end;
 end;
 
 procedure TMainForm.txtSourceDirectoryChange(Sender: TObject);
