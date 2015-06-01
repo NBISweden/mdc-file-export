@@ -65,10 +65,14 @@ procedure TMainForm.lstExperimentsSelectionChange(Sender: TObject;
   User: boolean);
 var
   ExperimentDirs: TStringList;
-  Wells: TStringList;
-  Well: String;
-  Experiment: String;
   ExperimentDir: String;
+  Experiment: String;
+  DateDirs: TStringList;
+  DateDir: String;
+  Dates: TStringList;
+  Date: String;
+  Well: String;
+  Wells: TStringList;
   i: Integer;
 begin
   lstWells.Clear;
@@ -80,11 +84,14 @@ begin
          // Construct the full path to experiment folder
          ExperimentDir := txtSourceDir.Text + SysUtils.PathDelim + Experiment;
          ExperimentDirs.Add(ExperimentDir);
-  Wells := TStringList.Create;
-  For ExperimentDir in ExperimentDirs do
-      Wells.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
+  DateDirs := TStringList.Create;
+  for ExperimentDir in ExperimentDirs do
+      DateDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
   // Populate the wells listbox
-  For Well in Wells do
+  Wells := TStringList.Create;
+  for DateDir in DateDirs do
+      Wells.AddStrings(FileUtil.FindAllDirectories(DateDir, False));
+  for Well in Wells do
       lstWells.AddItem(SysUtils.ExtractFileName(Well), Sender);
 end;
 
@@ -98,7 +105,7 @@ begin
   begin
     Experiments := FileUtil.FindAllDirectories(txtSourceDir.Text, False);
     lstExperiments.Clear;
-    For Exp in Experiments do
+    for Exp in Experiments do
         lstExperiments.AddItem(SysUtils.ExtractFileName(Exp),Sender);
   end;
 end;
