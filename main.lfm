@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 458
+  Left = 440
   Height = 477
-  Top = 114
+  Top = 185
   Width = 750
   Caption = 'MDC File Export Tool'
   ClientHeight = 477
@@ -68,9 +68,9 @@ object MainForm: TMainForm
   end
   object chkSelectWells: TCheckBox
     Left = 16
-    Height = 24
+    Height = 21
     Top = 208
-    Width = 182
+    Width = 161
     Caption = 'Select specific wells'
     OnChange = chkSelectWellsChange
     TabOrder = 3
@@ -81,7 +81,7 @@ object MainForm: TMainForm
     Top = 232
     Width = 664
     Caption = 'Select wells'
-    ClientHeight = 117
+    ClientHeight = 120
     ClientWidth = 660
     Enabled = False
     TabOrder = 4
