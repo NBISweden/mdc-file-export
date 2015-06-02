@@ -144,7 +144,9 @@ end;
 
 procedure TMainForm.cmdStartConversionClick(Sender: TObject);
 begin
-  // TODO: Add various checks
+  // ----------------
+  // Bunch of checks
+  // ----------------
 
   // Check if source and destination paths are the same
   if Pos(txtSourceDir.Text, txtDestDir.Text) > 0 then
@@ -154,15 +156,32 @@ begin
     exit;
   end;
 
+  // Source directory must be set
   if Length(txtSourceDir.Text) = 0 then
   begin
     ShowMessage('Source directory is empty!');
     exit;
   end;
 
+  // Destination directory must be set
   if Length(txtDestDir.Text) = 0 then
   begin
     ShowMessage('Destination directory is empty!');
+    exit;
+  end;
+
+  // At least one experiment has to be selected
+  if (lstExperiments.SelCount = 0) then
+  begin
+    ShowMessage('At least one Experiment has to be selected!');
+    exit;
+  end;
+
+  // Wells have to be selected, if enabled
+  if chkSelectWells.Checked and (lstWells.SelCount = 0) then
+  begin
+    ShowMessage('At least one well has to be selected, when the ' +
+                '"Select specific wells" checkbox is selected.');
     exit;
   end;
 
