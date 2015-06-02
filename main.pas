@@ -105,6 +105,7 @@ begin
   lstExperiments.Clear;
   if SysUtils.DirectoryExists(txtSourceDir.Text) then
   begin
+    Experiments := TStringList.Create;
     // Enable the edit box
     txtSourceDir.Enabled := True;
     // Populate experiments listbox based on selected directory
@@ -112,6 +113,7 @@ begin
     lstExperiments.Clear;
     for Exp in Experiments do
       lstExperiments.AddItem(SysUtils.ExtractFileName(Exp),Sender);
+    Experiments.Free;
   end;
 end;
 

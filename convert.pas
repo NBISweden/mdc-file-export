@@ -17,10 +17,12 @@ var
   dirs: TStringList;
   dir: String;
 begin
+  dirs := TStringList.Create;
   // TODO: Implement processing here.
   exprExperimentDir := TRegExpr.Create;
   exprExperimentDir.Expression := 'Experiment\ .*';
   dirs := FileUtil.FindAllDirectories(srcDir, False);
+
   for dir in dirs do
   begin
     if exprExperimentDir.Exec(dir) then
