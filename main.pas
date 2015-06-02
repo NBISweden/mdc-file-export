@@ -1,11 +1,11 @@
-unit main;
+unit Main;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
+  Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList;
 
 type
@@ -192,7 +192,7 @@ begin
     exit;
   end;
 
-  ShowMessage('Starting to process...'); // TODO: Implement processing here ...
+  ConvertFolderStructure;
 end;
 
 end.

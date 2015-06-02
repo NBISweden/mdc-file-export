@@ -35,7 +35,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="2">
+    <Units Count="3">
       <Unit0>
         <Filename Value="MDCFileExport.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -47,8 +47,13 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="main"/>
+        <UnitName Value="Main"/>
       </Unit1>
+      <Unit2>
+        <Filename Value="convert.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Convert"/>
+      </Unit2>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
