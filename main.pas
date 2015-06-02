@@ -200,7 +200,9 @@ begin
     exit;
   end;
 
-  ConvertFolderStructure;
+  // TODO: Add checks for folder structure in source folder!
+
+  ConvertFolderStructure(txtSourceDir.Text, txtDestDir.Text);
 end;
 
 end.
