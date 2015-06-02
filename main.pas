@@ -14,21 +14,21 @@ type
 
   TMainForm = class(TForm)
     cmdStartConversion: TButton;
-    chkSelectWells: TCheckBox;
+    chkSelectPlates: TCheckBox;
     txtSourceDir: TEdit;
     txtDestDir: TEdit;
-    groupBoxSelectWells: TGroupBox;
+    groupBoxSelectPlates: TGroupBox;
     cmdSelectSrcDir: TButton;
     cmdSelectDestDir: TButton;
     lblSrcDir: TLabel;
     lblDestDir: TLabel;
-    lstWells: TListBox;
+    lstPlates: TListBox;
     lstExperiments: TListBox;
     dlgSelectDestDir: TSelectDirectoryDialog;
     progressConversion: TProgressBar;
     lblSelectExperimen: TLabel;
     dlgSelectSrcDir: TSelectDirectoryDialog;
-    procedure chkSelectWellsChange(Sender: TObject);
+    procedure chkSelectPlatesChange(Sender: TObject);
     procedure cmdSelectDestDirClick(Sender: TObject);
     procedure cmdStartConversionClick(Sender: TObject);
     procedure txtDestDirChange(Sender: TObject);
@@ -58,10 +58,10 @@ var
   Experiment: String;
   DateDirs: TStringList;
   DateDir: String;
-  Well: String;
+  Plate: String;
   i: Integer;
 begin
-  lstWells.Clear;
+  lstPlates.Clear;
 
   ExperimentDirs := TStringList.Create;
   for i:=0 to lstExperiments.Items.Count-1 do
@@ -82,17 +82,19 @@ begin
     Experiment := SysUtils.ExtractFileName(ExperimentDir);
     DateDirs.Clear;
     DateDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
-    // Populate the wells listbox
-    // Loop down into the date folders, to retrieve the well folders
+    // Populate the plates listbox
+    // Loop down into the date folders, to retrieve the Plate folders
     for DateDir in DateDirs do // TODO: Add validation of date pattern
     begin
-      // Populate wells listbox with the wells (TODO: Use more than well no as ID?)
-      for Well in FileUtil.FindAllDirectories(DateDir, False) do
+      // Populate plates listbox with the plates (TODO: Use more than Plate no as ID?)
+      for Plate in FileUtil.FindAllDirectories(DateDir, False) do
       begin
-        lstWells.AddItem(SysUtils.ExtractFileName(Well) + ' (' + Experiment + ')', Sender);
+        lstPlates.AddItem(SysUtils.ExtractFileName(Plate) + ' (' + Experiment + ')', Sender);
       end;
     end;
   end;
+  ExperimentDirs.Free;
+  DateDirs.Free;
 end;
 
 procedure TMainForm.txtSourceDirectoryChange(Sender: TObject);
@@ -129,12 +131,12 @@ begin
     end;
 end;
 
-procedure TMainForm.chkSelectWellsChange(Sender: TObject);
+procedure TMainForm.chkSelectPlatesChange(Sender: TObject);
 begin
-  if groupBoxSelectWells.Enabled then
-    groupBoxSelectWells.Enabled := False
+  if groupBoxSelectPlates.Enabled then
+    groupBoxSelectPlates.Enabled := False
   else
-    groupBoxSelectWells.Enabled := True
+    groupBoxSelectPlates.Enabled := True
 end;
 
 procedure TMainForm.txtDestDirChange(Sender: TObject);
@@ -177,11 +179,11 @@ begin
     exit;
   end;
 
-  // Wells have to be selected, if enabled
-  if chkSelectWells.Checked and (lstWells.SelCount = 0) then
+  // Plates have to be selected, if enabled
+  if chkSelectPlates.Checked and (lstPlates.SelCount = 0) then
   begin
-    ShowMessage('At least one well has to be selected, when the ' +
-                '"Select specific wells" checkbox is selected.');
+    ShowMessage('At least one plate has to be selected, when the ' +
+                '"Select specific plates" checkbox is selected.');
     exit;
   end;
 

@@ -66,26 +66,26 @@ object MainForm: TMainForm
     TabOrder = 2
     TopIndex = -1
   end
-  object chkSelectWells: TCheckBox
+  object chkSelectPlates: TCheckBox
     Left = 16
     Height = 21
     Top = 208
-    Width = 161
-    Caption = 'Select specific wells'
-    OnChange = chkSelectWellsChange
+    Width = 168
+    Caption = 'Select specific plates'
+    OnChange = chkSelectPlatesChange
     TabOrder = 3
   end
-  object groupBoxSelectWells: TGroupBox
+  object groupBoxSelectPlates: TGroupBox
     Left = 16
     Height = 141
     Top = 232
     Width = 664
-    Caption = 'Select wells'
+    Caption = 'Select plates'
     ClientHeight = 120
     ClientWidth = 660
     Enabled = False
     TabOrder = 4
-    object lstWells: TListBox
+    object lstPlates: TListBox
       Left = 6
       Height = 104
       Top = 7
