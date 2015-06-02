@@ -185,10 +185,18 @@ begin
     exit;
   end;
 
-  // Destination directory has to be empty
+  // Destination directory has to be writeable
   if not FileUtil.DirectoryIsWritable(txtDestDir.Text) then
   begin
     ShowMessage('Destination directory is not writable!');
+    exit;
+  end;
+
+  // Destination directory must be empty
+  if not ((FileUtil.FindAllDirectories(txtDestDir.Text).Count = 0) and
+         (FileUtil.FindAllFiles(txtDestDir.Text).Count = 0)) then
+  begin
+    ShowMessage('Destination directory is not empty!');
     exit;
   end;
 
