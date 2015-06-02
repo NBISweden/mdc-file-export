@@ -27,6 +27,12 @@ begin
       ShowMessage('Match: ' + dir);
   end;
 
+  // Parse all the info needed to create destination folder structure
+
+  // Create destination folder structure
+
+  // Copy files from source to destination
+
   ShowMessage('Processing finished!');
 
   exprExperimentDir.Free;
