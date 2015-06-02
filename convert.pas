@@ -14,30 +14,66 @@ implementation
 procedure ConvertFolderStructure(srcDir: String; destDir: String);
 var
   exprExperimentDir: TRegExpr;
-  dirs: TStringList;
-  dir: String;
+  exprDateDir: TRegExpr;
+  exprPlateDir: TRegExpr;
+  experimentDirs: TStringList;
+  experimentDir: String;
+  dateDirs: TStringList;
+  dateDir: String;
+  plateDirs: TStringList;
+  plateDir: String;
 begin
-  dirs := TStringList.Create;
+  experimentDirs := TStringList.Create;
   // TODO: Implement processing here.
+
   exprExperimentDir := TRegExpr.Create;
   exprExperimentDir.Expression := 'Experiment\ .*';
-  dirs := FileUtil.FindAllDirectories(srcDir, False);
+  exprExperimentDir.Compile;
 
-  for dir in dirs do
+  experimentDirs := FileUtil.FindAllDirectories(srcDir, False);
+
+  for experimentDir in experimentDirs do
   begin
-    if exprExperimentDir.Exec(dir) then
-      ShowMessage('Match: ' + dir);
+    exprDateDir := TRegExpr.Create;
+    exprDateDir.Expression := '[0-9]{4}\-[0-9]{2}\-[0-9]{2}';
+    exprDateDir.Compile;
+
+    dateDirs := FileUtil.FindAllDirectories(experimentDir, False);
+
+    for dateDir in dateDirs do
+    begin
+      exprPlateDir := TRegExpr.Create;
+      exprPlateDir.Expression := '[0-9]{4}';
+      exprPlateDir.Compile;
+
+      plateDirs := FileUtil.FindAllDirectories(dateDir, False);
+      for plateDir in plateDirs do
+      begin
+        if exprPlateDir.Exec(SysUtils.ExtractFileName(plateDir)) then
+          ShowMessage('Plate dir: ' + SysUtils.ExtractFileName(plateDir));
+      end;
+    end;
+
   end;
 
-  // Parse all the info needed to create destination folder structure
+  //for experimentDir in experimentDirs do
+  //begin
+  //  if exprExperimentDir.Exec(experimentDir) then
+  //    ShowMessage('Match: ' + experimentDir);
+  //end;
 
-  // Create destination folder structure
+  // STEP: Parse all the info needed to create destination folder structure
 
-  // Copy files from source to destination
+  // STEP: Create destination folder structure
+
+  // STEP: Copy files from source to destination
 
   ShowMessage('Processing finished!');
 
   exprExperimentDir.Free;
+  experimentDirs.Free;
+  dateDirs.Free;
+  plateDirs.Free;
 end;
 
 end.
