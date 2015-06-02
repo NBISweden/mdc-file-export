@@ -185,6 +185,13 @@ begin
     exit;
   end;
 
+  // Destination directory has to be empty
+  if not FileUtil.DirectoryIsWritable(txtDestDir.Text) then
+  begin
+    ShowMessage('Destination directory is not writable!');
+    exit;
+  end;
+
   ShowMessage('Starting to process...'); // TODO: Implement processing here ...
 end;
 
