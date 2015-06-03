@@ -70,9 +70,7 @@ begin
 
   ShowMessage('Processing finished!');
 
-  exprExperimentDir.Free;
-  experimentDirs.Free;
-  dateDirs.Free;
+  exprPlateDir.Free;
   plateDirs.Free;
 end;
 
