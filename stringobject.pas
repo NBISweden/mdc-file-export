@@ -25,7 +25,7 @@ implementation
 
   constructor TString.Create;
   begin
-    Self.TheText := '';
+    Self.TheText := ''; // TODO: Check if this is needed
   end;
 
   procedure TString.SetText(NewText: String);
