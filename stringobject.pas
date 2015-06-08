@@ -11,6 +11,7 @@ type
 
   TString = class(TObject)
     TheText: String;
+    constructor Create;
     function GetText: String;
     procedure SetText(NewText: String);
     property Text: String Read GetText Write SetText;
@@ -21,6 +22,11 @@ implementation
     TheText: String;
 
   { TString }
+
+  constructor TString.Create;
+  begin
+    Self.TheText := '';
+  end;
 
   procedure TString.SetText(NewText: String);
   begin
