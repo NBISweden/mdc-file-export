@@ -163,7 +163,7 @@ begin
   begin
     if lstPlates.Selected[i] then
     begin
-      plateDirs.Add(lstPlates.Items[i])
+      plateDirs.AddObject(lstPlates.Items[i], lstPlates.Items.Objects[i]);
     end;
   end;
 

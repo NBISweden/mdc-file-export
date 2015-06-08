@@ -24,7 +24,7 @@ begin
   for i := 0 to plateDirs.Count-1 do
   begin
     plateDir := plateDirs.Strings[i];
-    plateDirObj := TString(plateDirs.Text);
+    plateDirObj := TString(plateDirs.Objects[i]);
     plateDirPath := plateDirObj.Text;
     ShowMessage('Plate dir: ' + plateDir + '\nWith directory:\n' + plateDirPath);
   end;
