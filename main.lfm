@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 440
+  Left = 447
   Height = 477
-  Top = 185
+  Top = 123
   Width = 750
   Caption = 'MDC File Export Tool'
   ClientHeight = 477

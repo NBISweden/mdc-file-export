@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, ActnList;
+  StdCtrls, Strings, ActnList, StringObject;
 
 type
 
@@ -41,6 +41,8 @@ type
     { public declarations }
   end;
 
+
+
 var
   MainForm: TMainForm;
 
@@ -58,7 +60,8 @@ var
   Experiment: String;
   DateDirs: TStringList;
   DateDir: String;
-  Plate: String;
+  PlateDir: String;
+  objPlateDir: TString;
   i: Integer;
 begin
   lstPlates.Clear;
@@ -83,13 +86,15 @@ begin
     DateDirs.Clear;
     DateDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
     // Populate the plates listbox
-    // Loop down into the date folders, to retrieve the Plate folders
+    // Loop down into the date folders, to retrieve the PlateDir folders
     for DateDir in DateDirs do // TODO: Add validation of date pattern
     begin
-      // Populate plates listbox with the plates (TODO: Use more than Plate no as ID?)
-      for Plate in FileUtil.FindAllDirectories(DateDir, False) do
+      // Populate plates listbox with the plates (TODO: Use more than PlateDir no as ID?)
+      for PlateDir in FileUtil.FindAllDirectories(DateDir, False) do
       begin
-        lstPlates.AddItem(SysUtils.ExtractFileName(Plate) + ' (' + Experiment + ')', Sender);
+        objPlateDir := TString.Create;
+        objPlateDir.Text := PlateDir;
+        lstPlates.AddItem(SysUtils.ExtractFileName(PlateDir) + ' (' + Experiment + ')', objPlateDir);
       end;
     end;
   end;
@@ -147,7 +152,21 @@ begin
 end;
 
 procedure TMainForm.cmdStartConversionClick(Sender: TObject);
+var
+  plateDirs: TStringList;
+  plateDir: String;
+  i: integer;
 begin
+  // Retrieve the plate dirs
+  plateDirs := TStringList.Create;
+  for i := 0 to lstPlates.Items.Count-1 do
+  begin
+    if lstPlates.Selected[i] then
+    begin
+      plateDirs.Add(lstPlates.Items[i])
+    end;
+  end;
+
   // ----------------
   // Bunch of checks
   // ----------------
@@ -206,7 +225,8 @@ begin
 
   // TODO: Add checks for folder structure in source folder!
 
-  ConvertFolderStructure(txtSourceDir.Text, txtDestDir.Text);
+  //ConvertFolderStructure(txtSourceDir.Text, txtDestDir.Text);
+  ConvertFolderStructure(plateDirs, txtDestDir.Text);
 end;
 
 end.
