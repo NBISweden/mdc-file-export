@@ -26,6 +26,12 @@ var
   imgFilePath: String;
   imgFileName: String;
 
+  imgInfoBaseName: String;
+  imgInfoWell: String;
+  imgInfoWellItem: String;
+  imgInfoWaveLength: String;
+  imgInfoIsThumb: Boolean;
+
 begin
   imgFileNameExpr := TRegExpr.Create;
   imgFileNameExpr.Expression := '([^_]+)_([^_]+)_(s[^_]+)_((w[^_]+))?_(thumb)?.*';
@@ -46,10 +52,15 @@ begin
       imgFileName := FileUtil.ExtractFileNameOnly(imgFilePath);
       imgFileNameExpr.Exec(imgFileName);
       ShowMessage('Image file: ' + LineEnding + imgFilePath);
-      for j := 0 to imgFileNameExpr.SubExprMatchCount do
-      begin
-        ShowMessage('Match ' + IntToStr(j) + ': ' + imgFileNameExpr.Match[j]);
-      end;
+      imgInfoBaseName := imgFileNameExpr.Match[1];
+      imgInfoWell := imgFileNameExpr.Match[2];
+      imgInfoWellItem := imgFileNameExpr.Match[3];
+      imgInfoWaveLength := imgFileNameExpr.Match[4];
+      // imgInfoIsThumb := imgFileNameExpr[1];
+      ShowMessage('BaseName: '   + imgInfoBaseName + LineEnding +
+                  'Well: '       + imgInfoWell + LineEnding +
+                  'WellItem: '   + imgInfoWellItem + LineEnding +
+                  'WaveLength: ' + imgInfoWaveLength);
     end;
     imgFilePaths.Free;
   end;
