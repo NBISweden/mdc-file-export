@@ -81,7 +81,7 @@ begin
     if not SysUtils.DirectoryExists(destPlateFolderPath) then
     begin
       ShowMessage('Trying to create folder ' + destPlateFolderPath);
-      // SysUtils.CreateDir(destPlateFolder);
+      SysUtils.CreateDir(destPlateFolderPath);
     end;
 
     // ------------------------------------------------------------------------
