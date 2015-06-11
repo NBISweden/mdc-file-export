@@ -18,6 +18,7 @@ var
   //plateDirs: TStringList;
   plateDirName: String;
   i: integer;
+  j: integer;
   plateDirObj: TString;
   plateDirPath: String;
   imgFileNameExpr: TRegExpr;
@@ -26,7 +27,8 @@ var
 
 begin
   imgFileNameExpr := TRegExpr.Create;
-  imgFileNameExpr.Expression := '([\w\d\s]+)_([\w\d]+)_(s\d)_(w\d)(_thumb)?.*';
+  imgFileNameExpr.Expression := '([.]+)_([.]+)_(s\d)_(w\d).*';
+  imgFileNameExpr.Compile;
 
   for i := 0 to plateDirs.Count-1 do
   begin
@@ -40,7 +42,12 @@ begin
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath);
     for imgFilePath in imgFilePaths do
     begin
+      imgFileNameExpr.Exec(imgFilePath);
       ShowMessage('Image file: ' + LineEnding + imgFilePath);
+      for j := 0 to imgFileNameExpr.SubExprMatchCount-1 do
+      begin
+        ShowMessage('Match ' + IntToStr(j) + ': ' + imgFileNameExpr.Match[j]);
+      end;
     end;
     imgFilePaths.Free;
   end;
