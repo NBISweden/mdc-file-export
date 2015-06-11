@@ -28,7 +28,7 @@ var
 
   imgInfoBaseName: String;
   imgInfoWell: String;
-  imgInfoWellItem: String;
+  imgInfoSite: String;
   imgInfoWaveLength: String;
   imgInfoIsThumb: Boolean;
 
@@ -54,29 +54,29 @@ begin
       ShowMessage('Image file: ' + LineEnding + imgFilePath);
       imgInfoBaseName := imgFileNameExpr.Match[1];
       imgInfoWell := imgFileNameExpr.Match[2];
-      imgInfoWellItem := imgFileNameExpr.Match[3];
+      imgInfoSite := imgFileNameExpr.Match[3];
       imgInfoWaveLength := imgFileNameExpr.Match[4];
       // imgInfoIsThumb := imgFileNameExpr[1];
       ShowMessage('BaseName: '   + imgInfoBaseName + LineEnding +
                   'Well: '       + imgInfoWell + LineEnding +
-                  'WellItem: '   + imgInfoWellItem + LineEnding +
+                  'WellItem: '   + imgInfoSite + LineEnding +
                   'WaveLength: ' + imgInfoWaveLength);
     end;
     imgFilePaths.Free;
   end;
 
-  //for experimentDir in experimentDirs do
-  //begin
-  //  if exprExperimentDir.Exec(experimentDir) then
-  //    ShowMessage('Match: ' + experimentDir);
-  //end;
+  // NOTE: Ok, what info do we need to create the destination file/folder
+  // structure? ... and which info do we have (see checkboxes below)
+  // --------------------------------------------------------------------
+  // [x] 1. Basename (from image)
+  // [x] 2. Plate number (from plate folder)
+  // [ ] 3. Date (possibly)
+  // [x] 4. Well (from image)
+  // [x] 5. Site (from image)
+  // [x] 6. Wavelength (from image)
 
-  // STEP: Parse image file names for additional info not avilable already
-
-
-  // STEP: Create destination folder structure
-
-  // STEP: Copy files from source to destination
+  // TODO: Remaining step: Create destination folder structure
+  // TODO: Remaining step: Copy files from source to destination
 
   ShowMessage('Processing finished!');
   plateDirs.Free;
