@@ -28,7 +28,7 @@ var
 
 begin
   imgFileNameExpr := TRegExpr.Create;
-  imgFileNameExpr.Expression := '(.+)_(.+)_.*';
+  imgFileNameExpr.Expression := '([^_]+)_([^_]+)_(s[^_]+)_((w[^_]+))?_(thumb)?.*';
   imgFileNameExpr.Compile;
 
   for i := 0 to plateDirs.Count-1 do
@@ -46,7 +46,7 @@ begin
       imgFileName := FileUtil.ExtractFileNameOnly(imgFilePath);
       imgFileNameExpr.Exec(imgFileName);
       ShowMessage('Image file: ' + LineEnding + imgFilePath);
-      for j := 0 to imgFileNameExpr.SubExprMatchCount-1 do
+      for j := 0 to imgFileNameExpr.SubExprMatchCount do
       begin
         ShowMessage('Match ' + IntToStr(j) + ': ' + imgFileNameExpr.Match[j]);
       end;
