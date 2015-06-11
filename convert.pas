@@ -21,6 +21,8 @@ var
   j: integer;
   plateDirObj: TString;
   plateDirPath: String;
+  plateDirDate: String;
+
   imgFileNameExpr: TRegExpr;
   imgFilePaths: TStringList;
   imgFilePath: String;
@@ -42,11 +44,22 @@ begin
     plateDirName := plateDirs.Strings[i];
     plateDirObj := TString(plateDirs.Objects[i]);
     plateDirPath := plateDirObj.Text;
-    ShowMessage('Plate dir: ' + plateDirName + LineEnding + 'With directory:' + LineEnding + plateDirPath);
-    // Loop over image files in plate directory
-    // TODO: Remember to check for possible "timepoint" folders here
+    // Extract Date from the Plate Dir's parent directory
+    plateDirDate := FileUtil.ExtractFileNameOnly(
+                      FileUtil.ChompPathDelim(
+                        SysUtils.ExtractFilePath(plateDirPath)
+                      )
+                    );
+
+    ShowMessage('Plate dir: ' + plateDirName + LineEnding +
+                'With directory:' + LineEnding +
+                plateDirPath + LineEnding +
+                'Date: ' + plateDirDate);
+
     imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath);
+    // Loop over image files in plate directory
+    // TODO: Remember to check for possible "timepoint" folders here
     for imgFilePath in imgFilePaths do
     begin
       imgFileName := FileUtil.ExtractFileNameOnly(imgFilePath);
@@ -70,7 +83,7 @@ begin
   // --------------------------------------------------------------------
   // [x] 1. Basename (from image)
   // [x] 2. Plate number (from plate folder)
-  // [ ] 3. Date (possibly)
+  // [x] 3. Date (possibly)
   // [x] 4. Well (from image)
   // [x] 5. Site (from image)
   // [x] 6. Wavelength (from image)
