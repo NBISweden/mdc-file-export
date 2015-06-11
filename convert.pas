@@ -16,17 +16,17 @@ implementation
 procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String);
 var
   //plateDirs: TStringList;
-  plateDir: String;
+  plateDirName: String;
   i: integer;
   plateDirObj: TString;
   plateDirPath: String;
 begin
   for i := 0 to plateDirs.Count-1 do
   begin
-    plateDir := plateDirs.Strings[i];
+    plateDirName := plateDirs.Strings[i];
     plateDirObj := TString(plateDirs.Objects[i]);
     plateDirPath := plateDirObj.Text;
-    ShowMessage('Plate dir: ' + plateDir + LineEnding + 'With directory:' + LineEnding + plateDirPath);
+    ShowMessage('Plate dir: ' + plateDirName + LineEnding + 'With directory:' + LineEnding + plateDirPath);
   end;
 
   //for experimentDir in experimentDirs do
