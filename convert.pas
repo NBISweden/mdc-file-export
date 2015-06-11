@@ -26,7 +26,7 @@ begin
     plateDir := plateDirs.Strings[i];
     plateDirObj := TString(plateDirs.Objects[i]);
     plateDirPath := plateDirObj.Text;
-    ShowMessage('Plate dir: ' + plateDir + '\nWith directory:\n' + plateDirPath);
+    ShowMessage('Plate dir: ' + plateDir + LineEnding + 'With directory:' + LineEnding + plateDirPath);
   end;
 
   //for experimentDir in experimentDirs do
