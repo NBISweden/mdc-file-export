@@ -64,13 +64,14 @@ begin
     begin
       imgFileName := FileUtil.ExtractFileNameOnly(imgFilePath);
       imgFileNameExpr.Exec(imgFileName);
-      ShowMessage('Image file: ' + LineEnding + imgFilePath);
       imgInfoBaseName := imgFileNameExpr.Match[1];
       imgInfoWell := imgFileNameExpr.Match[2];
       imgInfoSite := imgFileNameExpr.Match[3];
       imgInfoWaveLength := imgFileNameExpr.Match[4];
       // imgInfoIsThumb := imgFileNameExpr[1];
-      ShowMessage('BaseName: '   + imgInfoBaseName + LineEnding +
+      ShowMessage('Image info' + LineEnding +
+                  '------------------------------' + LineEnding +
+                  'BaseName: '   + imgInfoBaseName + LineEnding +
                   'Well: '       + imgInfoWell + LineEnding +
                   'WellItem: '   + imgInfoSite + LineEnding +
                   'WaveLength: ' + imgInfoWaveLength);
@@ -89,7 +90,25 @@ begin
   // [x] 6. Wavelength (from image)
 
   // TODO: Remaining step: Create destination folder structure
+  // So, now we need to construct what?
+  // --------------------------------------------------------------------
+  // 1. Experiment folders
+  //    a. Base name
+  //    b. Plate no
+  //    c. Date(?)
+  // 2. Optional time point folders
+  // 3. Image files
+  //    a. (Experiment) base name
+  //    b. Well
+  //    c. Site
+  //    d. Wavelength
+
   // TODO: Remaining step: Copy files from source to destination
+  //       Can we do everything inside the loop? Maybe inside each experiment
+  //       folder loop iteration?
+
+  // TODO: Provide better assertions that things are following the correct
+  //       structure
 
   ShowMessage('Processing finished!');
   plateDirs.Free;
