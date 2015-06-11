@@ -5,7 +5,7 @@ unit Convert;
 interface
 
 uses
-  Classes, Dialogs, FileUtil, RegExpr, SysUtils, StringObject;
+  Classes, Dialogs, FileUtil, RegExpr, SysUtils, StringObject, Strings;
 
 //procedure ConvertFolderStructure(srcDir: String; destDir: String);
 procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String);
@@ -21,6 +21,7 @@ var
   j: integer;
   plateDirObj: TString;
   plateDirPath: String;
+  plateNo: String;
   plateDirDateDirPath: String;
   plateDirDate: String;
   plateDirExperimentDirPath: String;
@@ -37,6 +38,10 @@ var
   imgInfoWaveLength: String;
   imgInfoIsThumb: Boolean;
 
+  // Destination stuff
+  destPlateFolderName: String;
+  destPlateFolderPath: String;
+
 begin
   imgFileNameExpr := TRegExpr.Create;
   imgFileNameExpr.Expression := '([^_]+)_([^_]+)_(s[^_]+)_((w[^_]+))?_(thumb)?.*';
@@ -44,11 +49,15 @@ begin
 
   for i := 0 to plateDirs.Count-1 do
   begin
+    // ------------------------------------------------------------------------
+    // Extract info
+    // ------------------------------------------------------------------------
     plateDirName := plateDirs.Strings[i];
     plateDirObj := TString(plateDirs.Objects[i]);
     plateDirPath := plateDirObj.Text;
     // Extract Date from the Plate Dir's parent directory
     plateDirDateDirPath := SysUtils.ExtractFilePath(plateDirPath);
+    plateNo := FileUtil.ExtractFileNameOnly(plateDirPath);
     plateDirDate := FileUtil.ExtractFileNameOnly(
                       FileUtil.ChompPathDelim(plateDirDateDirPath));
     plateDirExperimentDirPath := SysUtils.ExtractFilePath(
@@ -59,6 +68,25 @@ begin
     ShowMessage('Plate dir: ' + plateDirName + LineEnding +
                 'Date: ' + plateDirDate + LineEnding +
                 'Experiment: ' + plateDirExperiment);
+
+    // ------------------------------------------------------------------------
+    // Create folder
+    // ------------------------------------------------------------------------
+
+    destPlateFolderName := StringReplace(plateDirExperiment, ' ', '_', [rfReplaceAll]) +
+                           '_plate_' + plateNo + '_' + plateDirDate;
+
+    destPlateFolderPath := destDir + DirectorySeparator + destPlateFolderName;
+
+    if not SysUtils.DirectoryExists(destPlateFolderPath) then
+    begin
+      ShowMessage('Trying to create folder ' + destPlateFolderPath);
+      // SysUtils.CreateDir(destPlateFolder);
+    end;
+
+    // ------------------------------------------------------------------------
+    // Loop over image files, and copy
+    // ------------------------------------------------------------------------
 
     imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath);
@@ -73,12 +101,12 @@ begin
       imgInfoSite := imgFileNameExpr.Match[3];
       imgInfoWaveLength := imgFileNameExpr.Match[4];
       // imgInfoIsThumb := imgFileNameExpr[1]; TODO: Implement
-      ShowMessage('Image info' + LineEnding +
-                  '------------------------------' + LineEnding +
-                  'BaseName: '   + imgInfoBaseName + LineEnding +
-                  'Well: '       + imgInfoWell + LineEnding +
-                  'WellItem: '   + imgInfoSite + LineEnding +
-                  'WaveLength: ' + imgInfoWaveLength);
+      //ShowMessage('Image info' + LineEnding +
+      //            '------------------------------' + LineEnding +
+      //            'BaseName: '   + imgInfoBaseName + LineEnding +
+      //            'Well: '       + imgInfoWell + LineEnding +
+      //            'WellItem: '   + imgInfoSite + LineEnding +
+      //            'WaveLength: ' + imgInfoWaveLength);
     end;
     imgFilePaths.Free;
   end;
