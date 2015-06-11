@@ -51,7 +51,8 @@ begin
   //    ShowMessage('Match: ' + experimentDir);
   //end;
 
-  // STEP: Parse all the info needed to create destination folder structure
+  // STEP: Parse image file names for additional info not avilable already
+
 
   // STEP: Create destination folder structure
 
