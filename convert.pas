@@ -21,7 +21,10 @@ var
   j: integer;
   plateDirObj: TString;
   plateDirPath: String;
+  plateDirDateDirPath: String;
   plateDirDate: String;
+  plateDirExperimentDirPath: String;
+  plateDirExperiment: String;
 
   imgFileNameExpr: TRegExpr;
   imgFilePaths: TStringList;
@@ -45,16 +48,17 @@ begin
     plateDirObj := TString(plateDirs.Objects[i]);
     plateDirPath := plateDirObj.Text;
     // Extract Date from the Plate Dir's parent directory
+    plateDirDateDirPath := SysUtils.ExtractFilePath(plateDirPath);
     plateDirDate := FileUtil.ExtractFileNameOnly(
-                      FileUtil.ChompPathDelim(
-                        SysUtils.ExtractFilePath(plateDirPath)
-                      )
-                    );
+                      FileUtil.ChompPathDelim(plateDirDateDirPath));
+    plateDirExperimentDirPath := SysUtils.ExtractFilePath(
+                                   FileUtil.ChompPathDelim(plateDirDateDirPath));
+    plateDirExperiment := FileUtil.ExtractFileNameOnly(
+                            FileUtil.ChompPathDelim(plateDirExperimentDirPath));
 
     ShowMessage('Plate dir: ' + plateDirName + LineEnding +
-                'With directory:' + LineEnding +
-                plateDirPath + LineEnding +
-                'Date: ' + plateDirDate);
+                'Date: ' + plateDirDate + LineEnding +
+                'Experiment: ' + plateDirExperiment);
 
     imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath);
@@ -68,7 +72,7 @@ begin
       imgInfoWell := imgFileNameExpr.Match[2];
       imgInfoSite := imgFileNameExpr.Match[3];
       imgInfoWaveLength := imgFileNameExpr.Match[4];
-      // imgInfoIsThumb := imgFileNameExpr[1];
+      // imgInfoIsThumb := imgFileNameExpr[1]; TODO: Implement
       ShowMessage('Image info' + LineEnding +
                   '------------------------------' + LineEnding +
                   'BaseName: '   + imgInfoBaseName + LineEnding +
