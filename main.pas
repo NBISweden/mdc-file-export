@@ -15,6 +15,8 @@ type
   TMainForm = class(TForm)
     cmdStartConversion: TButton;
     chkSelectPlates: TCheckBox;
+    lblLog: TLabel;
+    memoLog: TMemo;
     txtSourceDir: TEdit;
     txtDestDir: TEdit;
     groupBoxSelectPlates: TGroupBox;

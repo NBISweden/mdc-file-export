@@ -1,10 +1,10 @@
 object MainForm: TMainForm
-  Left = 447
-  Height = 477
-  Top = 123
+  Left = 416
+  Height = 756
+  Top = 110
   Width = 750
   Caption = 'MDC File Export Tool'
-  ClientHeight = 477
+  ClientHeight = 756
   ClientWidth = 750
   LCLVersion = '1.0.10.0'
   object cmdSelectSrcDir: TButton
@@ -136,18 +136,31 @@ object MainForm: TMainForm
   object cmdStartConversion: TButton
     Left = 528
     Height = 33
-    Top = 432
+    Top = 424
     Width = 152
     Caption = 'Start conversion'
     OnClick = cmdStartConversionClick
     TabOrder = 7
   end
-  object progressConversion: TProgressBar
+  object memoLog: TMemo
     Left = 16
-    Height = 31
-    Top = 432
-    Width = 512
+    Height = 273
+    Top = 464
+    Width = 664
+    ReadOnly = True
+    ScrollBars = ssAutoVertical
     TabOrder = 8
+  end
+  object lblLog: TLabel
+    Left = 16
+    Height = 19
+    Top = 440
+    Width = 33
+    Caption = 'Log:'
+    Font.Height = -15
+    Font.Name = 'Sans'
+    ParentColor = False
+    ParentFont = False
   end
   object dlgSelectSrcDir: TSelectDirectoryDialog
     left = 568
