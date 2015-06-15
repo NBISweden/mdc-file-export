@@ -147,9 +147,13 @@ object MainForm: TMainForm
     Height = 273
     Top = 464
     Width = 664
+    Font.Height = -11
+    Font.Name = 'Sans'
+    ParentFont = False
     ReadOnly = True
     ScrollBars = ssAutoVertical
     TabOrder = 8
+    WordWrap = False
   end
   object lblLog: TLabel
     Left = 16

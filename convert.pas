@@ -8,12 +8,12 @@ uses
   Classes, Dialogs, FileUtil, RegExpr, SysUtils, StringObject, Strings;
 
 //procedure ConvertFolderStructure(srcDir: String; destDir: String);
-procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String);
+procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings);
 
 implementation
 
 //procedure ConvertFolderStructure(srcDir: String; destDir: String);
-procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String);
+procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings);
 var
   //plateDirs: TStringList;
   plateDirName: String;
@@ -52,9 +52,9 @@ begin
     // ------------------------------------------------------------------------
     // Extract info
     // ------------------------------------------------------------------------
-    plateDirName := plateDirs.Strings[i];
     plateDirObj := TString(plateDirs.Objects[i]);
     plateDirPath := plateDirObj.Text;
+    plateDirName := FileUtil.ExtractFileNameOnly(plateDirPath);
     // Extract Date from the Plate Dir's parent directory
     plateDirDateDirPath := SysUtils.ExtractFilePath(plateDirPath);
     plateNo := FileUtil.ExtractFileNameOnly(plateDirPath);
@@ -65,9 +65,11 @@ begin
     plateDirExperiment := FileUtil.ExtractFileNameOnly(
                             FileUtil.ChompPathDelim(plateDirExperimentDirPath));
 
-    ShowMessage('Plate dir: ' + plateDirName + LineEnding +
-                'Date: ' + plateDirDate + LineEnding +
-                'Experiment: ' + plateDirExperiment);
+    logStringList.Add('--------------------------------------------------');
+    logStringList.Add('Now processing:');
+    logStringList.Add('Experiment: ' + plateDirExperiment);
+    logStringList.Add('Plate dir: ' + plateDirName);
+    logStringList.Add('Date: ' + plateDirDate);
 
     // ------------------------------------------------------------------------
     // Create folder
@@ -80,7 +82,9 @@ begin
 
     if not SysUtils.DirectoryExists(destPlateFolderPath) then
     begin
-      ShowMessage('Trying to create folder ' + destPlateFolderPath);
+      logStringList.Add('--------------------------------------------------');
+      logStringList.Add('Trying to create folder:');
+      logStringList.Add(destPlateFolderPath);
       SysUtils.CreateDir(destPlateFolderPath);
     end;
 
@@ -142,7 +146,8 @@ begin
   // TODO: Provide better assertions that things are following the correct
   //       structure
 
-  ShowMessage('Processing finished!');
+  logStringList.Add('--------------------------------------------------');
+  logStringList.Add('Processing finished!');
   plateDirs.Free;
 end;
 
