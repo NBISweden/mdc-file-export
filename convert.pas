@@ -137,6 +137,13 @@ begin
       timeptDirPaths := TStringList.Create;
 
       timeptDirPaths := FileUtil.FindAllDirectories(plateDirPath, false);
+      if timeptDirPaths.Count = 0 then
+      begin
+        ShowMessage('Directory contains nether *.tif files, nor time point ' +
+                    'directories, so skipping!');
+        Exit;
+      end;
+
       for timeptDirPath in timeptDirPaths do
       begin
         imgFilePaths.Clear;
