@@ -70,8 +70,8 @@ begin
     logStringList.Add('--------------------------------------------------');
     logStringList.Add('Now processing:');
     logStringList.Add('Experiment: ' + plateDirExperiment);
-    logStringList.Add('Plate dir: ' + plateDirName);
-    logStringList.Add('Date: ' + plateDirDate);
+    logStringList.Add('Plate dir:  ' + plateDirName);
+    logStringList.Add('Date:       ' + plateDirDate);
 
     // ------------------------------------------------------------------------
     // Create folder
