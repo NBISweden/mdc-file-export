@@ -121,7 +121,7 @@ begin
         try
           CopyImage(imgFilePath, imgDestPath, logStringList, app);
         except
-          on E: EFCreateError do
+          on E: Exception do
             ShowMessage('An error occured:' + LineEnding + E.Message);
         end;
       end;
@@ -155,6 +155,7 @@ begin
             logStringList.Add('Error on trying to create folder ' + destTimeptDirPath);
             logStringList.Add(E.Message);
             ShowMessage(E.Message);
+            Exit;
           end;
         end;
 
