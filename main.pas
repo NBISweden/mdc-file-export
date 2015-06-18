@@ -17,6 +17,7 @@ type
     chkSelectPlates: TCheckBox;
     lblLog: TLabel;
     memoLog: TMemo;
+    prgbarMain: TProgressBar;
     txtSourceDir: TEdit;
     txtDestDir: TEdit;
     groupBoxSelectPlates: TGroupBox;
@@ -228,7 +229,11 @@ begin
   // TODO: Add checks for folder structure in source folder!
 
   //ConvertFolderStructure(txtSourceDir.Text, txtDestDir.Text);
+  prgbarMain.Style := pbstMarquee;
   ConvertFolderStructure(plateDirs, txtDestDir.Text, memoLog.Lines, Application);
+  prgbarMain.Style := pbstNormal;
+  prgbarMain.Update;
+  ShowMessage('Conversion Finished!');
 end;
 
 end.

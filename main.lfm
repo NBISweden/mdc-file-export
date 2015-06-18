@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 416
+  Left = 639
   Height = 756
-  Top = 110
+  Top = 171
   Width = 750
   Caption = 'MDC File Export Tool'
   ClientHeight = 756
@@ -144,11 +144,12 @@ object MainForm: TMainForm
   end
   object memoLog: TMemo
     Left = 16
-    Height = 273
+    Height = 256
     Top = 464
     Width = 664
     Font.Height = -11
-    Font.Name = 'Sans'
+    Font.Name = 'Courier'
+    HideSelection = False
     ParentFont = False
     ReadOnly = True
     ScrollBars = ssAutoVertical
@@ -165,6 +166,13 @@ object MainForm: TMainForm
     Font.Name = 'Sans'
     ParentColor = False
     ParentFont = False
+  end
+  object prgbarMain: TProgressBar
+    Left = 16
+    Height = 20
+    Top = 728
+    Width = 664
+    TabOrder = 9
   end
   object dlgSelectSrcDir: TSelectDirectoryDialog
     left = 568

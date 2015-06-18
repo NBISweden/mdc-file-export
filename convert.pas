@@ -57,6 +57,7 @@ begin
     plateDirObj := TString(plateDirs.Objects[i]);
     plateDirPath := plateDirObj.Text;
     plateDirName := FileUtil.ExtractFileNameOnly(plateDirPath);
+
     // Extract Date from the Plate Dir's parent directory
     plateDirDateDirPath := SysUtils.ExtractFilePath(plateDirPath);
     plateNo := FileUtil.ExtractFileNameOnly(plateDirPath);
@@ -119,6 +120,7 @@ begin
       logStringList.Add('Trying to copy file:' + LineEnding +
                   'from: ' + imgFilePath + LineEnding +
                   '->to: ' + imgDestPath);
+      app.ProcessMessages;
 
       // Do the actual copy
       if FileUtil.CopyFile(imgFilePath, imgDestPath) then
@@ -136,7 +138,6 @@ begin
 
   logStringList.Add('--------------------------------------------------');
   logStringList.Add('Processing finished!');
-  ShowMessage('Processing finished!');
   plateDirs.Free;
 end;
 
