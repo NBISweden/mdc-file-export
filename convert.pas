@@ -95,9 +95,11 @@ begin
         SysUtils.CreateDir(destPlateFolderPath);
       except
         on E: Exception do
+        begin
           logStringList.Add('Error on trying to create folder ' + destPlateFolderPath);
           logStringList.Add(E.Message);
           ShowMessage(E.Message);
+        end;
       end;
     end;
 
@@ -149,9 +151,11 @@ begin
           SysUtils.CreateDir(destTimeptDirPath);
         except
           on E: Exception do
+          begin
             logStringList.Add('Error on trying to create folder ' + destTimeptDirPath);
             logStringList.Add(E.Message);
             ShowMessage(E.Message);
+          end;
         end;
 
         imgFilePaths := FileUtil.FindAllFiles(timeptDirPath, ImagePathPatterns, false);
