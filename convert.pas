@@ -46,7 +46,7 @@ var
 
 begin
   imgFileNameExpr := TRegExpr.Create;
-  imgFileNameExpr.Expression := '([^_]+)_([^_]+)_(s[^_]+)_((w[^_]+))?.*';
+  imgFileNameExpr.Expression := '([^_]+)_([^_]+)_(s[^_]+)_((w[0-9]))?.*';
   imgFileNameExpr.Compile;
 
   for i := 0 to plateDirs.Count-1 do
