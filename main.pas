@@ -159,16 +159,6 @@ var
   plateDirs: TStringList;
   i: integer;
 begin
-  // Retrieve the plate dirs
-  plateDirs := TStringList.Create;
-  for i := 0 to lstPlates.Items.Count-1 do
-  begin
-    if lstPlates.Selected[i] then
-    begin
-      plateDirs.AddObject(lstPlates.Items[i], lstPlates.Items.Objects[i]);
-    end;
-  end;
-
   // ----------------
   // Bunch of checks
   // ----------------
@@ -226,6 +216,16 @@ begin
   end;
 
   // TODO: Add checks for folder structure in source folder!
+
+  // Retrieve the plate dirs
+  plateDirs := TStringList.Create;
+  for i := 0 to lstPlates.Items.Count-1 do
+  begin
+    if lstPlates.Selected[i] or not chkSelectPlates.Checked then // If we don't select on plates, take all the plates
+    begin
+      plateDirs.AddObject(lstPlates.Items[i], lstPlates.Items.Objects[i]);
+    end;
+  end;
 
   //ConvertFolderStructure(txtSourceDir.Text, txtDestDir.Text);
   prgbarMain.Style := pbstMarquee;
