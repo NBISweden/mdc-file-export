@@ -93,14 +93,10 @@ begin
       SysUtils.CreateDir(destPlateFolderPath);
     end;
 
-    // -------------------------------------------------------------------------
-    // Loop over image files, and copy
-    // -------------------------------------------------------------------------
-    imgFilePaths := TStringList.Create;
-    imgFilePaths := FileUtil.FindAllFiles(plateDirPath);
-
     // Loop over image files in plate directory
     // TODO: Remember to check for possible "timepoint" folders here
+    imgFilePaths := TStringList.Create;
+    imgFilePaths := FileUtil.FindAllFiles(plateDirPath);
     for imgFilePath in imgFilePaths do
     begin
       imgFileName := FileUtil.ExtractFileNameOnly(imgFilePath);
