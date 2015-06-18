@@ -184,7 +184,7 @@ begin
   // Source directory must be set
   if Length(txtSourceDir.Text) = 0 then
   begin
-    ShowMessage('Source directory is not set !');
+    ShowMessage('Source directory is not set!');
     exit;
   end;
 
