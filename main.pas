@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, Strings, ActnList, StringObject;
+  StdCtrls, ActnList, StringObject;
 
 type
 
@@ -157,7 +157,6 @@ end;
 procedure TMainForm.cmdStartConversionClick(Sender: TObject);
 var
   plateDirs: TStringList;
-  plateDir: String;
   i: integer;
 begin
   // Retrieve the plate dirs

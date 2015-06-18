@@ -18,8 +18,6 @@ type
   end;
 
 implementation
-  var
-    TheText: String;
 
   { TString }
 
