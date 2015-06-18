@@ -11,6 +11,7 @@ uses
 procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
 function FormatDestImageName(imgFilePath: String): String;
 procedure CopyImage(imgSrcPath: String; imgDestPath: String; logStringList: TStrings; app: TApplication);
+procedure Log(LogMsg: String; logStrings: TStrings);
 
 implementation
 
@@ -49,6 +50,7 @@ var
 
 const
   ImagePathPatterns = '*.tif; *.TIF; *.tiff; *.TIFF';
+  LogSep = '------------------------------------------------------------------------';
 
 begin
   for i := 0 to plateDirs.Count-1 do
@@ -70,11 +72,13 @@ begin
     plateDirExperiment := FileUtil.ExtractFileNameOnly(
                             FileUtil.ChompPathDelim(plateDirExperimentDirPath));
 
-    logStringList.Add('--------------------------------------------------');
-    logStringList.Add('Now processing:');
-    logStringList.Add('Experiment: ' + plateDirExperiment);
-    logStringList.Add('Plate dir:  ' + plateDirName);
-    logStringList.Add('Date:       ' + plateDirDate);
+    Msg := 'Now processing:' + LineEnding +
+           LogSep + LineEnding +
+           'Experiment: ' + plateDirExperiment + LineEnding +
+           'Plate dir:  ' + plateDirName + LineEnding +
+           'Date:       ' + plateDirDate + LineEnding +
+           LogSep;
+    Log(Msg, logStringList);
 
     // ------------------------------------------------------------------------
     // Create folder
@@ -90,16 +94,15 @@ begin
       // -----------------------------------------------------------------------
       // Create destination folder structure
       // -----------------------------------------------------------------------
-      logStringList.Add('--------------------------------------------------');
-      logStringList.Add('Trying to create folder:');
-      logStringList.Add(destPlateFolderPath);
+      Log('Trying to create folder:', logStringList);
+      Log(destPlateFolderPath, logStringList);
       try
         SysUtils.CreateDir(destPlateFolderPath);
       except
         on E: Exception do
         begin
-          logStringList.Add('Error on trying to create folder ' + destPlateFolderPath);
-          logStringList.Add(E.Message);
+          Log('Error on trying to create folder ' + destPlateFolderPath, logStringList);
+          Log(E.Message, logStringList);
           ShowMessage(E.Message);
         end;
       end;
@@ -133,8 +136,8 @@ begin
       // ----------------------------------------------------------------------
       // In case TimePoint folders DO exist
       // ----------------------------------------------------------------------
-      logStringList.Add('No *.tif images in plate dir, so assuming to contain timepoints: ' + LineEnding +
-                        plateDirPath);
+      Log('No *.tif images in plate dir, so assuming to contain timepoints: ' + LineEnding +
+                        plateDirPath, logStringList);
 
       timeptDirPaths := TStringList.Create;
 
@@ -143,7 +146,7 @@ begin
       begin
         Msg := 'Directory contains nether *.tif files, nor time point ' +
                'directories, so skipping!';
-        logStringList.Add(Msg);
+        Log(Msg, logStringList);
         ShowMessage(Msg);
         Exit;
       end;
@@ -153,8 +156,7 @@ begin
         imgFilePaths.Clear;
 
         timeptDirName := FileUtil.ExtractFileNameOnly(timeptDirPath);
-        logStringList.Add('--------------------------------------------------');
-        logStringList.Add('Now processing: ' + timeptDirName);
+        Log('Now processing: ' + timeptDirName, logStringList);
 
         // Create timepoint folder in dest folder ...
         destTimeptDirPath := destPlateFolderPath + PathDelim + timeptDirName;
@@ -163,8 +165,8 @@ begin
         except
           on E: Exception do
           begin
-            logStringList.Add('Error on trying to create folder ' + destTimeptDirPath);
-            logStringList.Add(E.Message);
+            Log('Error on trying to create folder ' + destTimeptDirPath, logStringList);
+            Log(E.Message, logStringList);
             ShowMessage(E.Message);
             Exit;
           end;
@@ -189,8 +191,7 @@ begin
   // TODO: Provide better assertions that things are following the correct
   //       structure
 
-  logStringList.Add('--------------------------------------------------');
-  logStringList.Add('Processing finished!');
+  Log('Processing finished!', logStringList);
   plateDirs.Free;
 end;
 
@@ -234,19 +235,29 @@ procedure CopyImage(imgSrcPath: String; imgDestPath: String; logStringList: TStr
 begin
   // Log paths to be copied
   logStringList.BeginUpdate;
-  logStringList.Add('----------------------------------------------------------------------');
-  logStringList.Add('Trying to copy file:' + LineEnding +
+  Log('Trying to copy file:' + LineEnding +
               'from: ' + imgSrcPath + LineEnding +
-              '->to: ' + imgDestPath);
+              '  to: ' + imgDestPath, logStringList);
   app.ProcessMessages;
 
   // Do the actual copy
   if FileUtil.CopyFile(imgSrcPath, imgDestPath) then
-     logStringList.Add('Copy successful!');
+     Log('Copy successful!', logStringList);
   logStringList.EndUpdate;
 
   // Make sure the UI doesn't freeze
   app.ProcessMessages;
+end;
+
+// =============================================================================
+
+procedure Log(LogMsg: String; logStrings: TStrings);
+var
+  DateStr: String;
+begin
+  DateStr := '[' + FormatDateTime('YYYY-MM-DD, hh:mm:ss', Now) + ']';
+  logStrings.Add(DateStr + ' ' + LogMsg);
+  Application.ProcessMessages;
 end;
 
 end.
