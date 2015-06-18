@@ -45,6 +45,8 @@ var
 
   destTimeptDirPath: String;
 
+  Msg: String;
+
 const
   ImagePathPatterns = '*.tif; *.TIF; *.tiff; *.TIFF';
 
@@ -139,8 +141,10 @@ begin
       timeptDirPaths := FileUtil.FindAllDirectories(plateDirPath, false);
       if timeptDirPaths.Count = 0 then
       begin
-        ShowMessage('Directory contains nether *.tif files, nor time point ' +
-                    'directories, so skipping!');
+        Msg := 'Directory contains nether *.tif files, nor time point ' +
+               'directories, so skipping!';
+        logStringList.Add(Msg);
+        ShowMessage(Msg);
         Exit;
       end;
 
