@@ -32,11 +32,18 @@ var
   imgFilePaths: TStringList;
   imgFilePath: String;
 
+  // Time point folder stuff
+  timeptDirName: String;
+  timeptDirPath: String;
+  timeptDirPaths: TStringList;
+
   // Destination stuff
   destPlateFolderName: String;
   destPlateFolderPath: String;
   imgDestName: String;
   imgDestPath: String;
+
+  destTimeptDirPath: String;
 
 begin
   for i := 0 to plateDirs.Count-1 do
@@ -91,10 +98,10 @@ begin
 
     // TODO: Remember to check for possible "timepoint" folders here
     if not (imgFilePaths.Count = 0) then
-    // ----------------------------------------------------------------------
-    // In case TimePoint folders do NOT exist
-    // ----------------------------------------------------------------------
     begin
+      // ----------------------------------------------------------------------
+      // In case TimePoint folders do NOT exist
+      // ----------------------------------------------------------------------
       for imgFilePath in imgFilePaths do
       begin
         imgDestName := FormatDestImageName(imgFilePath);
@@ -107,7 +114,33 @@ begin
       // ----------------------------------------------------------------------
       // In case TimePoint folders DO exist
       // ----------------------------------------------------------------------
-      ShowMessage('No TIF images found, in folder:' + LineEnding + plateDirPath)
+      logStringList.Add('No *.tif images in plate dir, so assuming to contain timepoints: ' + LineEnding +
+                        plateDirPath);
+
+      timeptDirPaths := TStringList.Create;
+
+      timeptDirPaths := FileUtil.FindAllDirectories(plateDirPath, false);
+      for timeptDirPath in timeptDirPaths do
+      begin
+        imgFilePaths.Clear;
+
+        timeptDirName := FileUtil.ExtractFileNameOnly(timeptDirPath);
+        logStringList.Add('--------------------------------------------------');
+        logStringList.Add('Now processing: ' + timeptDirName);
+
+        // Create timepoint folder in dest folder ...
+        destTimeptDirPath := destPlateFolderPath + PathDelim + timeptDirName;
+        try
+          SysUtils.CreateDir(destTimeptDirPath);
+        //except ...
+        finally
+          ShowMessage('Tried creating folder: ' + LineEnding +
+                      destTimeptDirPath)
+        end;
+      end;
+
+      timeptDirPaths.Free;
+      // ----------------------------------------------------------------------
     end;
 
     imgFilePaths.Free;
