@@ -228,7 +228,7 @@ begin
   // TODO: Add checks for folder structure in source folder!
 
   //ConvertFolderStructure(txtSourceDir.Text, txtDestDir.Text);
-  ConvertFolderStructure(plateDirs, txtDestDir.Text, memoLog.Lines);
+  ConvertFolderStructure(plateDirs, txtDestDir.Text, memoLog.Lines, Application);
 end;
 
 end.

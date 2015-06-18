@@ -5,15 +5,15 @@ unit Convert;
 interface
 
 uses
-  Classes, Dialogs, FileUtil, RegExpr, SysUtils, StringObject, Strings;
+  Classes, Dialogs, FileUtil, Forms, RegExpr, SysUtils, StringObject, Strings;
 
 //procedure ConvertFolderStructure(srcDir: String; destDir: String);
-procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings);
+procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
 
 implementation
 
 //procedure ConvertFolderStructure(srcDir: String; destDir: String);
-procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings);
+procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
 var
   //plateDirs: TStringList;
   plateDirName: String;
@@ -124,6 +124,9 @@ begin
       if FileUtil.CopyFile(imgFilePath, imgDestPath) then
          logStringList.Add('Copy successful!');
       logStringList.EndUpdate;
+
+      // Make sure the UI doesn't freeze
+      app.ProcessMessages;
     end;
     imgFilePaths.Free;
   end;
