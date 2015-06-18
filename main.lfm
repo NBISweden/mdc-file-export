@@ -1,10 +1,10 @@
 object MainForm: TMainForm
   Left = 629
-  Height = 756
+  Height = 723
   Top = 171
   Width = 742
   Caption = 'MDC File Export Tool'
-  ClientHeight = 756
+  ClientHeight = 723
   ClientWidth = 742
   LCLVersion = '1.0.10.0'
   object cmdSelectSrcDir: TButton
@@ -57,7 +57,7 @@ object MainForm: TMainForm
   object lstExperiments: TListBox
     Left = 8
     Height = 104
-    Top = 96
+    Top = 88
     Width = 664
     Font.Height = -12
     Font.Name = 'Sans'
@@ -72,7 +72,7 @@ object MainForm: TMainForm
   object chkSelectPlates: TCheckBox
     Left = 8
     Height = 21
-    Top = 208
+    Top = 200
     Width = 150
     Caption = 'Select specific plates'
     Font.Height = -12
@@ -84,7 +84,7 @@ object MainForm: TMainForm
   object groupBoxSelectPlates: TGroupBox
     Left = 8
     Height = 141
-    Top = 232
+    Top = 224
     Width = 664
     Caption = 'Select plates'
     ClientHeight = 124
@@ -112,7 +112,7 @@ object MainForm: TMainForm
   object txtDestDir: TEdit
     Left = 8
     Height = 25
-    Top = 394
+    Top = 376
     Width = 664
     Enabled = False
     Font.Height = -12
@@ -125,7 +125,7 @@ object MainForm: TMainForm
   object lblDestDir: TLabel
     Left = 8
     Height = 16
-    Top = 376
+    Top = 360
     Width = 114
     Caption = 'Destination Folder:'
     Font.Height = -12
@@ -136,7 +136,7 @@ object MainForm: TMainForm
   object cmdSelectDestDir: TButton
     Left = 672
     Height = 25
-    Top = 394
+    Top = 376
     Width = 64
     Caption = 'Select'
     Font.Height = -12
@@ -148,7 +148,7 @@ object MainForm: TMainForm
   object cmdStartConversion: TButton
     Left = 520
     Height = 33
-    Top = 424
+    Top = 408
     Width = 152
     Caption = 'Start conversion'
     Font.Height = -12
@@ -160,7 +160,7 @@ object MainForm: TMainForm
   object memoLog: TMemo
     Left = 8
     Height = 256
-    Top = 464
+    Top = 432
     Width = 664
     Font.Height = -11
     Font.Name = 'Courier'
@@ -174,7 +174,7 @@ object MainForm: TMainForm
   object lblLog: TLabel
     Left = 8
     Height = 16
-    Top = 440
+    Top = 416
     Width = 27
     Caption = 'Log:'
     Font.Height = -12
@@ -185,7 +185,7 @@ object MainForm: TMainForm
   object prgbarMain: TProgressBar
     Left = 8
     Height = 20
-    Top = 728
+    Top = 696
     Width = 664
     TabOrder = 9
   end
