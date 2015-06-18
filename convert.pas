@@ -41,11 +41,12 @@ var
   // Destination stuff
   destPlateFolderName: String;
   destPlateFolderPath: String;
+  imgDestName: String;
   imgDestPath: String;
 
 begin
   imgFileNameExpr := TRegExpr.Create;
-  imgFileNameExpr.Expression := '([^_]+)_([^_]+)_(s[^_]+)_((w[^_]+))?_(thumb)?.*';
+  imgFileNameExpr.Expression := '([^_]+)_([^_]+)_(s[^_]+)_((w[^_]+))?.*';
   imgFileNameExpr.Compile;
 
   for i := 0 to plateDirs.Count-1 do
@@ -109,17 +110,29 @@ begin
       imgInfoSite := imgFileNameExpr.Match[3];
       imgInfoWaveLength := imgFileNameExpr.Match[4];
       // imgInfoIsThumb := imgFileNameExpr[1]; TODO: Implement
-      //ShowMessage('Image info' + LineEnding +
-      //            '------------------------------' + LineEnding +
-      //            'BaseName: '   + imgInfoBaseName + LineEnding +
-      //            'Well: '       + imgInfoWell + LineEnding +
-      //            'WellItem: '   + imgInfoSite + LineEnding +
-      //            'WaveLength: ' + imgInfoWaveLength);
+
+      if (imgInfoBaseName = '') or
+         (imgInfoWell = '') or
+         (imgInfoSite = '') or
+         (imgInfoWaveLength = '') then
+      begin
+        //ShowMessage('Some image info missing:' + LineEnding +
+        //            '------------------------------' + LineEnding +
+        //            'BaseName: '   + imgInfoBaseName + LineEnding +
+        //            'Well: '       + imgInfoWell + LineEnding +
+        //            'WellItem: '   + imgInfoSite + LineEnding +
+        //            'WaveLength: ' + imgInfoWaveLength);
+      end;
+
 
       // -----------------------------------------------------------------------
       // Construct destination path
       // -----------------------------------------------------------------------
-      imgDestPath := '';
+      imgDestName := imgInfoBaseName + '_' +
+                     imginfoWell + '_' +
+                     imgInfoSite + '_' +
+                     imgInfoWaveLength + '.tif';
+      imgDestPath := destPlateFolderPath + PathDelim + imgDestName;
       logStringList.Add('----------------------------------------------------------------------');
       logStringList.Add('Trying to copy file:' + LineEnding +
                   'from: ' + imgFilePath + LineEnding +
@@ -137,4 +150,3 @@ begin
 end;
 
 end.
-
