@@ -41,6 +41,7 @@ var
   // Destination stuff
   destPlateFolderName: String;
   destPlateFolderPath: String;
+  imgDestPath: String;
 
 begin
   imgFileNameExpr := TRegExpr.Create;
@@ -82,18 +83,21 @@ begin
 
     if not SysUtils.DirectoryExists(destPlateFolderPath) then
     begin
+      // -----------------------------------------------------------------------
+      // Create destination folder structure
+      // -----------------------------------------------------------------------
       logStringList.Add('--------------------------------------------------');
       logStringList.Add('Trying to create folder:');
       logStringList.Add(destPlateFolderPath);
       SysUtils.CreateDir(destPlateFolderPath);
     end;
 
-    // ------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Loop over image files, and copy
-    // ------------------------------------------------------------------------
-
+    // -------------------------------------------------------------------------
     imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath);
+
     // Loop over image files in plate directory
     // TODO: Remember to check for possible "timepoint" folders here
     for imgFilePath in imgFilePaths do
@@ -111,37 +115,18 @@ begin
       //            'Well: '       + imgInfoWell + LineEnding +
       //            'WellItem: '   + imgInfoSite + LineEnding +
       //            'WaveLength: ' + imgInfoWaveLength);
+
+      // -----------------------------------------------------------------------
+      // Construct destination path
+      // -----------------------------------------------------------------------
+      imgDestPath := '';
+      logStringList.Add('----------------------------------------------------------------------');
+      logStringList.Add('Trying to copy file:' + LineEnding +
+                  'from: ' + imgFilePath + LineEnding +
+                  '->to: ' + imgDestPath);
     end;
     imgFilePaths.Free;
   end;
-
-  // NOTE: Ok, what info do we need to create the destination file/folder
-  // structure? ... and which info do we have (see checkboxes below)
-  // --------------------------------------------------------------------
-  // [x] 1. Basename (from image)
-  // [x] 2. Plate number (from plate folder)
-  // [x] 3. Date (possibly)
-  // [x] 4. Well (from image)
-  // [x] 5. Site (from image)
-  // [x] 6. Wavelength (from image)
-
-  // TODO: Remaining step: Create destination folder structure
-  // So, now we need to construct what?
-  // --------------------------------------------------------------------
-  // 1. Experiment folders
-  //    a. Base name
-  //    b. Plate no
-  //    c. Date(?)
-  // 2. Optional time point folders
-  // 3. Image files
-  //    a. (Experiment) base name
-  //    b. Well
-  //    c. Site
-  //    d. Wavelength
-
-  // TODO: Remaining step: Copy files from source to destination
-  //       Can we do everything inside the loop? Maybe inside each experiment
-  //       folder loop iteration?
 
   // TODO: Provide better assertions that things are following the correct
   //       structure
