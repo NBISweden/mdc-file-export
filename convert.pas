@@ -105,34 +105,25 @@ begin
       imgInfoWell := imgFileNameExpr.Match[2];
       imgInfoSite := imgFileNameExpr.Match[3];
       imgInfoWaveLength := imgFileNameExpr.Match[4];
-      // imgInfoIsThumb := imgFileNameExpr[1]; TODO: Implement
 
-      if (imgInfoBaseName = '') or
-         (imgInfoWell = '') or
-         (imgInfoSite = '') or
-         (imgInfoWaveLength = '') then
-      begin
-        //ShowMessage('Some image info missing:' + LineEnding +
-        //            '------------------------------' + LineEnding +
-        //            'BaseName: '   + imgInfoBaseName + LineEnding +
-        //            'Well: '       + imgInfoWell + LineEnding +
-        //            'WellItem: '   + imgInfoSite + LineEnding +
-        //            'WaveLength: ' + imgInfoWaveLength);
-      end;
-
-
-      // -----------------------------------------------------------------------
       // Construct destination path
-      // -----------------------------------------------------------------------
       imgDestName := imgInfoBaseName + '_' +
                      imginfoWell + '_' +
                      imgInfoSite + '_' +
                      imgInfoWaveLength + '.tif';
       imgDestPath := destPlateFolderPath + PathDelim + imgDestName;
+
+      // Log paths to be copied
+      logStringList.BeginUpdate;
       logStringList.Add('----------------------------------------------------------------------');
       logStringList.Add('Trying to copy file:' + LineEnding +
                   'from: ' + imgFilePath + LineEnding +
                   '->to: ' + imgDestPath);
+
+      // Do the actual copy
+      if FileUtil.CopyFile(imgFilePath, imgDestPath) then
+         logStringList.Add('Copy successful!');
+      logStringList.EndUpdate;
     end;
     imgFilePaths.Free;
   end;
