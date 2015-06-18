@@ -133,6 +133,7 @@ begin
 
   logStringList.Add('--------------------------------------------------');
   logStringList.Add('Processing finished!');
+  ShowMessage('Processing finished!');
   plateDirs.Free;
 end;
 
