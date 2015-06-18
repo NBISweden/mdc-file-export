@@ -45,6 +45,9 @@ var
 
   destTimeptDirPath: String;
 
+const
+  ImagePathPatterns = '*.tif; *.TIF; *.tiff; *.TIFF';
+
 begin
   for i := 0 to plateDirs.Count-1 do
   begin
@@ -94,7 +97,7 @@ begin
 
     // Loop over image files in plate directory
     imgFilePaths := TStringList.Create;
-    imgFilePaths := FileUtil.FindAllFiles(plateDirPath, '*.tif; *.TIF; *.tiff; *.TIFF', false);
+    imgFilePaths := FileUtil.FindAllFiles(plateDirPath, ImagePathPatterns, false);
 
     // TODO: Remember to check for possible "timepoint" folders here
     if not (imgFilePaths.Count = 0) then
@@ -134,8 +137,14 @@ begin
           SysUtils.CreateDir(destTimeptDirPath);
         //except ...
         finally
-          ShowMessage('Tried creating folder: ' + LineEnding +
-                      destTimeptDirPath)
+        end;
+
+        imgFilePaths := FileUtil.FindAllFiles(timeptDirPath, ImagePathPatterns, false);
+        for imgFilePath in imgFilePaths do
+        begin
+          imgDestName := FormatDestImageName(imgFilePath);
+          imgDestPath := destTimeptDirPath + PathDelim + imgDestName;
+          CopyImage(imgFilePath, imgDestPath, logStringList, app);
         end;
       end;
 
