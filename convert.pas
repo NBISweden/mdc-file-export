@@ -109,7 +109,12 @@ begin
       begin
         imgDestName := FormatDestImageName(imgFilePath);
         imgDestPath := destPlateFolderPath + PathDelim + imgDestName;
-        CopyImage(imgFilePath, imgDestPath, logStringList, app);
+        try
+          CopyImage(imgFilePath, imgDestPath, logStringList, app);
+        except
+          on E: EFCreateError do
+            ShowMessage('An error occured:' + LineEnding + E.Message);
+        end;
       end;
     end
     else

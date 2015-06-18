@@ -201,10 +201,17 @@ begin
   end;
 
   // Destination directory has to be writeable
-  if not FileUtil.DirectoryIsWritable(txtDestDir.Text) then
-  begin
-    ShowMessage('Destination directory is not writable!');
-    exit;
+  try
+    if not FileUtil.DirectoryIsWritable(txtDestDir.Text) then
+    begin
+      ShowMessage('Destination directory is not writable!');
+      exit;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Error on checking if directory is writable:' + LineEnding +
+                  txtDestDir.Text + LineEnding +
+                  'Error message: ' + E.Message);
   end;
 
   // Destination directory must be empty
