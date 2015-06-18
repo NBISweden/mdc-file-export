@@ -14,7 +14,8 @@ procedure CopyImage(imgSrcPath: String; imgDestPath: String; logStringList: TStr
 
 implementation
 
-//procedure ConvertFolderStructure(srcDir: String; destDir: String);
+// =============================================================================
+
 procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
 var
   //plateDirs: TStringList;
@@ -87,6 +88,7 @@ begin
     // Loop over image files in plate directory
     imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath, '*.tif; *.TIF; *.tiff; *.TIFF', false);
+
     // TODO: Remember to check for possible "timepoint" folders here
     if not (imgFilePaths.Count = 0) then
     // ----------------------------------------------------------------------
@@ -119,6 +121,8 @@ begin
   plateDirs.Free;
 end;
 
+// =============================================================================
+
 function FormatDestImageName(imgFilePath: String): String;
 var
   imgFileNameExpr: TRegExpr;
@@ -150,6 +154,8 @@ begin
                  imgInfoWaveLength + '.tif';
   Result := imgDestName;
 end;
+
+// =============================================================================
 
 procedure CopyImage(imgSrcPath: String; imgDestPath: String; logStringList: TStrings; app: TApplication);
 begin
