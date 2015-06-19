@@ -5,6 +5,9 @@ unit Main;
 interface
 
 uses
+{$ifdef Darwin}
+  cthreads;
+{$endif}
   Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList, StringObject;
 
