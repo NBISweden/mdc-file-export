@@ -73,7 +73,7 @@ object MainForm: TMainForm
     Left = 8
     Height = 21
     Top = 176
-    Width = 150
+    Width = 168
     Caption = 'Select specific plates'
     Font.Height = -12
     Font.Name = 'Sans'
@@ -104,7 +104,7 @@ object MainForm: TMainForm
       ItemHeight = 0
       MultiSelect = True
       ParentFont = False
-      ScrollWidth = 648
+      ScrollWidth = 646
       TabOrder = 0
       TopIndex = -1
     end
