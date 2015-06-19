@@ -6,6 +6,9 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
+  {$IFDEF Darwin}
+  cthreads,
+  {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, Main, Convert, StringObject
   { you can add units after this };
