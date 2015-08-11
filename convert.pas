@@ -202,49 +202,13 @@ var
   imgFileNameExpr: TRegExpr;
   imgFileName: String;
 
-  imgInfoBaseName: String;
-  imgInfoWell: String;
-  imgInfoSite: String;
-  imgInfoWaveLength: String;
-  imgInfoThumb: String;
-
-  imgDestName: String;
-
 begin
   imgFileNameExpr := TRegExpr.Create;
-  imgFileNameExpr.Expression := '([^_]+)_([^_]+)_((s[0-9]+)_)?((w[0-9]+)_)?((thumb)_)?.*';
+  imgFileNameExpr.Expression := '(_)?[0-9A-Z]{7,8}-[0-9A-Z]{4}-[0-9A-Z]{4}-([0-9A-Z]{4}-)?[0-9A-Z]{10,12}';
   imgFileNameExpr.Compile;
-
-  imgFileName := FileUtil.ExtractFileNameOnly(imgFilePath);
-  imgFileNameExpr.Exec(imgFileName);
-
-  imgInfoBaseName := imgFileNameExpr.Match[1];
-  imgInfoWell := imgFileNameExpr.Match[2];
-  imgInfoSite := imgFileNameExpr.Match[4];
-  imgInfoWaveLength := imgFileNameExpr.Match[6];
-  imgInfoThumb := imgFileNameExpr.Match[8];
-
-  // ShowMessage('imgInfoBaseName: ' + imgInfoBaseName + LineEnding +
-  //   'imgInfoWell: ' + imgInfoWell + LineEnding +
-  //   'imgInfoSite: ' + imgInfoSite + LineEnding +
-  //   'imgInfoWaveLength: ' + imgInfoWaveLength + LineEnding +
-  //   'imgInfoThumb: ' + imgInfoThumb);
-
-  // Construct destination path
-  imgDestName := imgInfoBaseName;
-
-  if imginfoWell <> '' then
-    imgDestName := imgDestName + '_' + imginfoWell;
-  if imgInfoSite <> '' then
-    imgDestName := imgDestName + '_' + imgInfoSite;
-  if imgInfoWaveLength <> '' then
-    imgDestName := imgDestName + '_' + imgInfoWaveLength;
-  if imgInfoThumb <> '' then
-    imgDestName := imgDestName + '_' + imgInfoThumb;
-
-  imgDestName := imgDestName + '.tif';
-
-  Result := imgDestName;
+  imgFileName := ExtractFileName(imgFilePath);
+  imgFileName := imgFileNameExpr.Replace(imgFileName, '', true);
+  Result := imgFileName;
 end;
 
 // =============================================================================
