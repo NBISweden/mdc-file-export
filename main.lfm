@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 545
+  Left = 496
   Height = 708
-  Top = 187
+  Top = 184
   Width = 742
   Caption = 'MDC File Export Tool'
   ClientHeight = 708
   ClientWidth = 742
-  Constraints.MinHeight = 500
+  Constraints.MinHeight = 480
   Constraints.MinWidth = 320
   LCLVersion = '1.0.10.0'
   object cmdSelectSrcDir: TButton
