@@ -1,17 +1,20 @@
 object MainForm: TMainForm
-  Left = 629
+  Left = 545
   Height = 708
-  Top = 171
+  Top = 187
   Width = 742
   Caption = 'MDC File Export Tool'
   ClientHeight = 708
   ClientWidth = 742
+  Constraints.MinHeight = 500
+  Constraints.MinWidth = 320
   LCLVersion = '1.0.10.0'
   object cmdSelectSrcDir: TButton
     Left = 672
     Height = 25
     Top = 16
     Width = 64
+    Anchors = [akTop, akRight]
     Caption = 'Select'
     Font.Height = -12
     Font.Name = 'Sans'
@@ -24,6 +27,7 @@ object MainForm: TMainForm
     Height = 25
     Top = 16
     Width = 664
+    Anchors = [akTop, akLeft, akRight]
     Enabled = False
     Font.Height = -12
     Font.Name = 'Sans'
@@ -59,6 +63,7 @@ object MainForm: TMainForm
     Height = 104
     Top = 64
     Width = 664
+    Anchors = [akTop, akLeft, akRight]
     Font.Height = -12
     Font.Name = 'Sans'
     ItemHeight = 0
@@ -73,7 +78,7 @@ object MainForm: TMainForm
     Left = 8
     Height = 21
     Top = 176
-    Width = 168
+    Width = 150
     Caption = 'Select specific plates'
     Font.Height = -12
     Font.Name = 'Sans'
@@ -86,6 +91,7 @@ object MainForm: TMainForm
     Height = 141
     Top = 200
     Width = 664
+    Anchors = [akTop, akLeft, akRight]
     Caption = 'Select plates'
     ClientHeight = 124
     ClientWidth = 660
@@ -99,6 +105,7 @@ object MainForm: TMainForm
       Height = 104
       Top = 7
       Width = 648
+      Anchors = [akTop, akLeft, akRight]
       Font.Height = -12
       Font.Name = 'Sans'
       ItemHeight = 0
@@ -114,6 +121,7 @@ object MainForm: TMainForm
     Height = 25
     Top = 360
     Width = 664
+    Anchors = [akTop, akLeft, akRight]
     Enabled = False
     Font.Height = -12
     Font.Name = 'Sans'
@@ -138,6 +146,7 @@ object MainForm: TMainForm
     Height = 25
     Top = 360
     Width = 64
+    Anchors = [akTop, akRight]
     Caption = 'Select'
     Font.Height = -12
     Font.Name = 'Sans'
@@ -150,6 +159,7 @@ object MainForm: TMainForm
     Height = 33
     Top = 384
     Width = 152
+    Anchors = [akTop, akRight]
     Caption = 'Start conversion'
     Font.Height = -12
     Font.Name = 'Sans'
@@ -162,6 +172,7 @@ object MainForm: TMainForm
     Height = 256
     Top = 416
     Width = 664
+    Anchors = [akTop, akLeft, akRight, akBottom]
     Font.Height = -11
     Font.Name = 'Courier'
     HideSelection = False
@@ -187,6 +198,7 @@ object MainForm: TMainForm
     Height = 20
     Top = 680
     Width = 664
+    Anchors = [akLeft, akRight, akBottom]
     TabOrder = 9
   end
   object dlgSelectSrcDir: TSelectDirectoryDialog
