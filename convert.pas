@@ -218,13 +218,13 @@ begin
   // Log paths to be copied
   logStringList.BeginUpdate;
   Log('Trying to copy file:' + LineEnding +
-              'from: ' + imgSrcPath + LineEnding +
-              '  to: ' + imgDestPath, logStringList);
+      'from: ' + imgSrcPath + LineEnding +
+      '  to: ' + imgDestPath, logStringList);
   app.ProcessMessages;
 
   // Do the actual copy
   if FileUtil.CopyFile(imgSrcPath, imgDestPath) then
-     Log('Copy successful!', logStringList);
+    Log('Copy successful!', logStringList);
   logStringList.EndUpdate;
 
   // Make sure the UI doesn't freeze
