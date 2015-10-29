@@ -90,8 +90,12 @@ begin
     DateDirs.Clear;
     DateDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
     // Populate the plates listbox
-    // Loop down into the date folders, to retrieve the PlateDir folders
-    for DateDir in DateDirs do // TODO: Add validation of date pattern
+    // Loop down into the barcode and date folders, to retrieve the
+    // PlateDir folders
+
+    // TODO: Check here if it is a date dir, or a barcode dir! (and if it is the
+    //       latter, recurse down into it, to see if there are any date dirs!
+    for DateDir in DateDirs do
     begin
       Date := FileUtil.ExtractFileNameOnly(DateDir);
       // Populate plates listbox with the plates (TODO: Use more than PlateDir no as ID?)
