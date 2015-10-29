@@ -63,6 +63,7 @@ var
   Experiment: String;
   DateDirs: TStringList;
   DateDir: String;
+  Date: String;
   PlateDir: String;
   objPlateDir: TString;
   i: Integer;
@@ -92,12 +93,13 @@ begin
     // Loop down into the date folders, to retrieve the PlateDir folders
     for DateDir in DateDirs do // TODO: Add validation of date pattern
     begin
+      Date := FileUtil.ExtractFileNameOnly(DateDir);
       // Populate plates listbox with the plates (TODO: Use more than PlateDir no as ID?)
       for PlateDir in FileUtil.FindAllDirectories(DateDir, False) do
       begin
         objPlateDir := TString.Create;
         objPlateDir.Text := PlateDir;
-        lstPlates.AddItem(SysUtils.ExtractFileName(PlateDir) + ' (' + Experiment + ')', objPlateDir);
+        lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) + ' | Experiment: ' + Experiment + ' | Date: ' + Date, objPlateDir);
       end;
     end;
   end;
