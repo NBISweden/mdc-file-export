@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, ActnList, StringObject;
+  StdCtrls, ActnList, StringObject, RegExpr;
 
 type
 
@@ -61,9 +61,19 @@ var
   ExperimentDirs: TStringList;
   ExperimentDir: String;
   Experiment: String;
+
+  ExperimentSubDirs: TStringList;
+  ExperimentSubDir: String;
+
+  BarCodeDirs: TStringList;
+  BarCodeDir: String;
+  BarCode: String;
+
   DateDirs: TStringList;
   DateDir: String;
   Date: String;
+  DatePtrn: TRegExpr;
+
   PlateDir: String;
   objPlateDir: TString;
   i: Integer;
@@ -83,32 +93,59 @@ begin
     end;
   end;
 
-  DateDirs := TStringList.Create;
+  ExperimentSubDirs := TStringList.Create;
+  DatePtrn := TRegExpr.Create;
+  DatePtrn.Expression := '\d{4}-\d{2}-\d{2}';
+  DatePtrn.Compile;
+
   for ExperimentDir in ExperimentDirs do
   begin
     Experiment := SysUtils.ExtractFileName(ExperimentDir);
-    DateDirs.Clear;
-    DateDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
+    ExperimentSubDirs.Clear;
+    ExperimentSubDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
     // Populate the plates listbox
     // Loop down into the barcode and date folders, to retrieve the
     // PlateDir folders
 
     // TODO: Check here if it is a date dir, or a barcode dir! (and if it is the
     //       latter, recurse down into it, to see if there are any date dirs!
-    for DateDir in DateDirs do
+    for ExperimentSubDir in ExperimentSubDirs do
     begin
-      Date := FileUtil.ExtractFileNameOnly(DateDir);
-      // Populate plates listbox with the plates (TODO: Use more than PlateDir no as ID?)
-      for PlateDir in FileUtil.FindAllDirectories(DateDir, False) do
+      if DatePtrn.Exec(ExperimentSubDir) then
       begin
-        objPlateDir := TString.Create;
-        objPlateDir.Text := PlateDir;
-        lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) + ' | Experiment: ' + Experiment + ' | Date: ' + Date, objPlateDir);
+        Date := FileUtil.ExtractFileNameOnly(ExperimentSubDir);
+        // Populate plates listbox with the plates (TODO: Use more than PlateDir no as ID?)
+        for PlateDir in FileUtil.FindAllDirectories(ExperimentSubDir, False) do
+        begin
+          objPlateDir := TString.Create;
+          objPlateDir.Text := PlateDir;
+          lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) + ' | Experiment: ' + Experiment + ' | Date: ' + Date, objPlateDir);
+        end;
+      end
+      else begin
+        BarCode := FileUtil.ExtractFileNameOnly(ExperimentSubDir);
+        for DateDir in FileUtil.FindAllDirectories(ExperimentSubDir, False) do begin
+          Date := FileUtil.ExtractFileNameOnly(DateDir);
+          if DatePtrn.Exec(Date) then begin
+            for PlateDir in FileUtil.FindAllDirectories(DateDir, False) do begin
+              objPlateDir := TString.Create;
+              objPlateDir.Text := PlateDir;
+              lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) +
+                                ' | Experiment: ' + Experiment +
+                                ' | Barcode: ' + BarCode +
+                                ' | Date: ' + Date, objPlateDir);
+            end;
+          end
+          else begin
+              WriteLn('Subfolder of barcode dir is not a date: ' + DateDir);
+          end;
+        end;
+        // ShowMessage('Folder is not a date: ' + ExperimentSubDir);
       end;
     end;
   end;
   ExperimentDirs.Free;
-  DateDirs.Free;
+  ExperimentSubDirs.Free;
 end;
 
 procedure TMainForm.txtSourceDirectoryChange(Sender: TObject);
