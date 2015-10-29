@@ -55,8 +55,7 @@ implementation
 
 { TMainForm }
 
-procedure TMainForm.lstExperimentsSelectionChange(Sender: TObject;
-  User: boolean);
+procedure TMainForm.lstExperimentsSelectionChange(Sender: TObject; User: boolean);
 var
   ExperimentDirs: TStringList;
   ExperimentDir: String;
