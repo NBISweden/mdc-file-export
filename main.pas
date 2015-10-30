@@ -102,12 +102,8 @@ begin
     Experiment := SysUtils.ExtractFileName(ExperimentDir);
     ExperimentSubDirs.Clear;
     ExperimentSubDirs.AddStrings(FileUtil.FindAllDirectories(ExperimentDir, False));
-    // Populate the plates listbox
-    // Loop down into the barcode and date folders, to retrieve the
-    // PlateDir folders
-
-    // TODO: Check here if it is a date dir, or a barcode dir! (and if it is the
-    //       latter, recurse down into it, to see if there are any date dirs!
+    // Populate the plates listbox by looping down into the barcode and date
+    // folders, to retrieve the PlateDir folders
     for ExperimentSubDir in ExperimentSubDirs do
     begin
       if DatePtrn.Exec(ExperimentSubDir) then
