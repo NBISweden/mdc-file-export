@@ -116,7 +116,9 @@ begin
         begin
           objPlateDir := TString.Create;
           objPlateDir.Text := PlateDir;
-          lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) + ' | Experiment: ' + Experiment + ' | Date: ' + Date, objPlateDir);
+          lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) +
+                            ' | Experiment: ' + Experiment +
+                            ' | Date: ' + Date, objPlateDir);
         end;
       end
       else begin
