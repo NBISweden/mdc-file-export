@@ -107,7 +107,7 @@ object MainForm: TMainForm
       Width = 648
       Anchors = [akTop, akLeft, akRight]
       Font.Height = -12
-      Font.Name = 'Sans'
+      Font.Name = 'Courier New'
       ItemHeight = 0
       MultiSelect = True
       ParentFont = False
