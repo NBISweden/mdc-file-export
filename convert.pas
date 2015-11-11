@@ -69,6 +69,8 @@ begin
                       FileUtil.ChompPathDelim(plateDirDateDirPath));
     plateDirExperimentDirPath := SysUtils.ExtractFilePath(
                                    FileUtil.ChompPathDelim(plateDirDateDirPath));
+
+    // FIXME: The below line does get the bar code folder when that is present.
     plateDirExperiment := FileUtil.ExtractFileNameOnly(
                             FileUtil.ChompPathDelim(plateDirExperimentDirPath));
 
