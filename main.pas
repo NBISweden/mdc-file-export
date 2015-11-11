@@ -67,6 +67,7 @@ var
   BarCodeDirs: TStringList;
   BarCodeDir: String;
   BarCode: String;
+  BarCodeExists: Boolean;
 
   DateDirs: TStringList;
   DateDir: String;
@@ -78,6 +79,7 @@ var
   i: Integer;
 begin
   lstPlates.Clear;
+  BarCodeExists := False;
 
   ExperimentDirs := TStringList.Create;
   for i:=0 to lstExperiments.Items.Count-1 do
@@ -118,6 +120,7 @@ begin
         end;
       end
       else begin
+        BarCodeExists := True;
         BarCode := FileUtil.ExtractFileNameOnly(ExperimentSubDir);
         for DateDir in FileUtil.FindAllDirectories(ExperimentSubDir, False) do begin
           Date := FileUtil.ExtractFileNameOnly(DateDir);
