@@ -201,6 +201,15 @@ object MainForm: TMainForm
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 9
   end
+  object cmdOpenDestDir: TButton
+    Left = 672
+    Height = 33
+    Top = 384
+    Width = 64
+    Caption = 'Open'
+    OnClick = cmdOpenDestDirClick
+    TabOrder = 10
+  end
   object dlgSelectSrcDir: TSelectDirectoryDialog
     left = 568
     top = 65512

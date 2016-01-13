@@ -6,13 +6,14 @@ interface
 
 uses
   Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, ActnList, StringObject, RegExpr;
+  StdCtrls, ActnList, StringObject, RegExpr, LCLIntf;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    cmdOpenDestDir: TButton;
     cmdStartConversion: TButton;
     chkSelectPlates: TCheckBox;
     lblLog: TLabel;
@@ -32,6 +33,7 @@ type
     lblSelectExperimen: TLabel;
     dlgSelectSrcDir: TSelectDirectoryDialog;
     procedure chkSelectPlatesChange(Sender: TObject);
+    procedure cmdOpenDestDirClick(Sender: TObject);
     procedure cmdSelectDestDirClick(Sender: TObject);
     procedure cmdStartConversionClick(Sender: TObject);
     procedure txtDestDirChange(Sender: TObject);
@@ -190,6 +192,11 @@ begin
     groupBoxSelectPlates.Enabled := False
   else
     groupBoxSelectPlates.Enabled := True
+end;
+
+procedure TMainForm.cmdOpenDestDirClick(Sender: TObject);
+begin
+  OpenDocument(txtDestDir.Text);
 end;
 
 procedure TMainForm.txtDestDirChange(Sender: TObject);
