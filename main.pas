@@ -36,6 +36,7 @@ type
     procedure cmdOpenDestDirClick(Sender: TObject);
     procedure cmdSelectDestDirClick(Sender: TObject);
     procedure cmdStartConversionClick(Sender: TObject);
+    procedure memoLogChange(Sender: TObject);
     procedure txtDestDirChange(Sender: TObject);
     procedure txtSourceDirectoryChange(Sender: TObject);
     procedure cmdSelectSrcDirClick(Sender: TObject);
@@ -208,6 +209,10 @@ end;
 procedure TMainForm.txtDestDirChange(Sender: TObject);
 begin
   txtDestDir.Enabled := True;
+  if (txtDestDir.Text <> '') then
+  begin
+     cmdOpenDestDir.Enabled := True;
+  end
 end;
 
 procedure TMainForm.cmdStartConversionClick(Sender: TObject);
@@ -297,6 +302,11 @@ begin
   prgbarMain.Style := pbstNormal;
   prgbarMain.Update;
   ShowMessage('Conversion Finished!');
+end;
+
+procedure TMainForm.memoLogChange(Sender: TObject);
+begin
+
 end;
 
 end.
