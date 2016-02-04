@@ -160,7 +160,7 @@ object MainForm: TMainForm
     Top = 384
     Width = 176
     Anchors = [akTop, akRight]
-    Caption = 'Start file export'
+    Caption = 'Start image export'
     Color = 10079385
     Font.Height = -13
     Font.Name = 'Sans'
