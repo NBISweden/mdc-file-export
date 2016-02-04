@@ -111,6 +111,9 @@ begin
     for ExperimentSubDir in ExperimentSubDirs do
     begin
       if DatePtrn.Exec(ExperimentSubDir) then
+      // -----------------------------------------------------------------------
+      // CASE: DATE FOLDER
+      // -----------------------------------------------------------------------
       begin
         Date := FileUtil.ExtractFileNameOnly(ExperimentSubDir);
         // Populate plates listbox with the plates (TODO: Use more than PlateDir no as ID?)
@@ -124,6 +127,9 @@ begin
         end;
       end
       else begin
+        // -----------------------------------------------------------------------
+        // CASE: NOT DATE FOLDER (IMPLICITLY ASSUME BARCODE FOLDER?)
+        // -----------------------------------------------------------------------
         BarCodeExists := True;
         BarCode := FileUtil.ExtractFileNameOnly(ExperimentSubDir);
         for DateDir in FileUtil.FindAllDirectories(ExperimentSubDir, False) do begin
