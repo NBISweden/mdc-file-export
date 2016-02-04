@@ -5,7 +5,7 @@ unit Convert;
 interface
 
 uses
-  Classes, Dialogs, FileUtil, Forms, RegExpr, SysUtils, StringObject;
+  Classes, Dialogs, FileUtil, Forms, RegExpr, StrUtils, SysUtils, StringObject;
 
 //procedure ConvertFolderStructure(srcDir: String; destDir: String);
 procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
@@ -123,14 +123,21 @@ begin
       // ----------------------------------------------------------------------
       for imgFilePath in imgFilePaths do
       begin
-        imgDestName := FormatDestImageName(imgFilePath);
-        imgDestPath := destPlateFolderPath + PathDelim + imgDestName;
-        try
-          CopyImage(imgFilePath, imgDestPath, logStringList, app);
-        except
-          on E: Exception do
-            ShowMessage('An error occured:' + LineEnding + E.Message);
-        end;
+        if not (AnsiContainsStr(imgFilePath, 'thumb')) then
+        begin
+          imgDestName := FormatDestImageName(imgFilePath);
+          imgDestPath := destPlateFolderPath + PathDelim + imgDestName;
+          try
+            CopyImage(imgFilePath, imgDestPath, logStringList, app);
+          except
+            on E: Exception do
+              ShowMessage('An error occured:' + LineEnding + E.Message);
+          end;
+        end
+        else
+        begin
+          Log('Skipping thumbnail: ' + imgFilePath, logStringList)
+        end
       end;
     end
     else
