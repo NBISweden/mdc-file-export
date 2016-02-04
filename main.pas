@@ -145,7 +145,7 @@ begin
             end;
           end
           else begin
-              WriteLn('Subfolder of barcode dir is not a date: ' + DateDir);
+              ShowMessage('Warning: Subfolder of barcode dir is not a date: ' + DateDir + '!');
           end;
         end;
         // ShowMessage('Folder is not a date: ' + ExperimentSubDir);
