@@ -293,7 +293,7 @@ begin
   memoLog.Clear; // In case of a restart, so we don't mix up multiple things...
 
   prgbarMain.Style := pbstMarquee;
-  ConvertFolderStructure(plateDirs, txtDestDir.Text, memoLog.Lines, Application);
+  ConvertFolderStructure(txtSourceDir.Text, plateDirs, txtDestDir.Text, memoLog.Lines, Application);
   prgbarMain.Style := pbstNormal;
   prgbarMain.Update;
   ShowMessage('Conversion Finished!');

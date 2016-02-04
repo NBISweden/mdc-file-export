@@ -8,7 +8,7 @@ uses
   Classes, Dialogs, FileUtil, Forms, RegExpr, StrUtils, SysUtils, StringObject;
 
 //procedure ConvertFolderStructure(srcDir: String; destDir: String);
-procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
+procedure ConvertFolderStructure(experimentDirPath: String; plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
 function FormatDestImageName(imgFilePath: String): String;
 procedure CopyImage(imgSrcPath: String; imgDestPath: String; logStringList: TStrings; app: TApplication);
 procedure Log(LogMsg: String; logStrings: TStrings);
@@ -17,7 +17,7 @@ implementation
 
 // =============================================================================
 
-procedure ConvertFolderStructure(plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
+procedure ConvertFolderStructure(experimentDirPath: String; plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
 var
   //plateDirs: TStringList;
   plateDirName: String;
@@ -27,7 +27,8 @@ var
   plateNo: String;
   plateDirDateDirPath: String;
   plateDirDate: String;
-  plateDirExperimentDirPath: String;
+  plateDirParentDirPath: String;
+  plateDirBarCode: String;
   plateDirExperiment: String;
 
   imgFilePaths: TStringList;
@@ -67,27 +68,68 @@ begin
     plateNo := FileUtil.ExtractFileNameOnly(plateDirPath);
     plateDirDate := FileUtil.ExtractFileNameOnly(
                       FileUtil.ChompPathDelim(plateDirDateDirPath));
-    plateDirExperimentDirPath := SysUtils.ExtractFilePath(
+    plateDirParentDirPath := SysUtils.ExtractFilePath(
                                    FileUtil.ChompPathDelim(plateDirDateDirPath));
 
-    // FIXME: The below line does get the bar code folder when that is present.
-    plateDirExperiment := FileUtil.ExtractFileNameOnly(
-                            FileUtil.ChompPathDelim(plateDirExperimentDirPath));
+    // *** BEGIN: DEBUG CODE ***
+    //Msg := LogSep + LineEnding +
+    //       'plateDirParentDirPath: ' + plateDirParentDirPath + LineEnding +
+    //       'experimentDirPath: ' + experimentDirPath + LineEnding +
+    //       LogSep + LineEnding;
+    //Log(Msg, logStringList);
+    // *** END: DEBUG CODE ***
 
-    Msg := 'Now processing:' + LineEnding +
-           LogSep + LineEnding +
-           'Experiment: ' + plateDirExperiment + LineEnding +
-           'Plate dir:  ' + plateDirName + LineEnding +
-           'Date:       ' + plateDirDate + LineEnding +
-           LogSep;
+    // Check if the parent folder of the plate dir is the experiment folder
+    if (FileUtil.ChompPathDelim(plateDirParentDirPath) = FileUtil.ChompPathDelim(experimentDirPath)) then
+    begin
+      plateDirExperiment := FileUtil.ExtractFileNameOnly(
+                              FileUtil.ChompPathDelim(plateDirParentDirPath));
+    end
+    else
+    begin
+      plateDirBarCode := FileUtil.ExtractFileNameOnly(
+                              FileUtil.ChompPathDelim(plateDirParentDirPath));
+      plateDirExperiment := FileUtil.ExtractFileNameOnly(FileUtil.ChompPathDelim(SysUtils.ExtractFilePath(
+                                     FileUtil.ChompPathDelim(plateDirParentDirPath))));
+    end;
+
+
+    if (plateDirBarCode <> '') then
+    begin
+      Msg := 'Now processing:' + LineEnding +
+             LogSep + LineEnding +
+             'Experiment: ' + plateDirExperiment + LineEnding +
+             'Bar code:   ' + plateDirBarCode + LineEnding +
+             'Plate dir:  ' + plateDirName + LineEnding +
+             'Date:       ' + plateDirDate + LineEnding +
+             LogSep;
+    end
+    else
+    begin
+      Msg := 'Now processing:' + LineEnding +
+             LogSep + LineEnding +
+             'Experiment: ' + plateDirExperiment + LineEnding +
+             'Plate dir:  ' + plateDirName + LineEnding +
+             'Date:       ' + plateDirDate + LineEnding +
+             LogSep;
+    end;
     Log(Msg, logStringList);
 
     // ------------------------------------------------------------------------
     // Create folder
     // ------------------------------------------------------------------------
 
-    destPlateFolderName := StringReplace(plateDirExperiment, ' ', '_', [rfReplaceAll]) +
-                           '_plate_' + plateNo + '_' + plateDirDate;
+    if (plateDirBarCode <> '') then
+    begin
+      destPlateFolderName := StringReplace(plateDirExperiment, ' ', '_', [rfReplaceAll]) +
+                             '.barcode_' + StringReplace(plateDirBarCode, ' ', '_', [rfReplaceAll]) +
+                             '.plate_' + plateNo + '.' + plateDirDate;
+    end
+    else
+    begin
+      destPlateFolderName := StringReplace(plateDirExperiment, ' ', '_', [rfReplaceAll]) +
+                             '.plate_' + plateNo + '.' + plateDirDate;
+    end;
 
     destPlateFolderPath := destDir + DirectorySeparator + destPlateFolderName;
 
