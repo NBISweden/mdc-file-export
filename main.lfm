@@ -206,6 +206,7 @@ object MainForm: TMainForm
     Height = 33
     Top = 384
     Width = 64
+    Anchors = [akTop, akRight]
     Caption = 'Open'
     OnClick = cmdOpenDestDirClick
     TabOrder = 10
