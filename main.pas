@@ -13,9 +13,11 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    chkAborted: TCheckBox;
     cmdOpenDestDir: TButton;
     cmdStartConversion: TButton;
     chkSelectPlates: TCheckBox;
+    cmdAbortExport: TButton;
     lblLog: TLabel;
     memoLog: TMemo;
     prgbarMain: TProgressBar;
@@ -33,10 +35,10 @@ type
     lblSelectExperimen: TLabel;
     dlgSelectSrcDir: TSelectDirectoryDialog;
     procedure chkSelectPlatesChange(Sender: TObject);
+    procedure cmdAbortExportClick(Sender: TObject);
     procedure cmdOpenDestDirClick(Sender: TObject);
     procedure cmdSelectDestDirClick(Sender: TObject);
     procedure cmdStartConversionClick(Sender: TObject);
-    procedure memoLogChange(Sender: TObject);
     procedure txtDestDirChange(Sender: TObject);
     procedure txtSourceDirectoryChange(Sender: TObject);
     procedure cmdSelectSrcDirClick(Sender: TObject);
@@ -201,6 +203,13 @@ begin
     groupBoxSelectPlates.Enabled := True
 end;
 
+procedure TMainForm.cmdAbortExportClick(Sender: TObject);
+begin
+  chkAborted.Checked := True;
+  cmdAbortExport.Enabled := False;
+  cmdAbortExport.Caption := 'Aborting ...';
+end;
+
 procedure TMainForm.cmdOpenDestDirClick(Sender: TObject);
 begin
   OpenDocument(txtDestDir.Text);
@@ -220,6 +229,11 @@ var
   plateDirs: TStringList;
   i: integer;
 begin
+  // Restore abortion button and (hidden checkbox) states:
+  chkAborted.Checked := False;
+  cmdAbortExport.Enabled := True;
+  cmdAbortExport.Caption := 'Abort Image Export';
+
   // ----------------
   // Bunch of checks
   // ----------------
@@ -298,14 +312,18 @@ begin
   memoLog.Clear; // In case of a restart, so we don't mix up multiple things...
 
   prgbarMain.Style := pbstMarquee;
-  ConvertFolderStructure(txtSourceDir.Text, plateDirs, txtDestDir.Text, memoLog.Lines, Application);
+  ConvertFolderStructure(txtSourceDir.Text, plateDirs, txtDestDir.Text, memoLog.Lines, chkAborted, Application);
   prgbarMain.Style := pbstNormal;
   prgbarMain.Update;
-  ShowMessage('Conversion Finished!');
-end;
 
-procedure TMainForm.memoLogChange(Sender: TObject);
-begin
+  if (chkAborted.Checked) then
+  begin
+    ShowMessage('Warning: Processing stopped, after abort!');
+  end
+  else
+  begin
+    ShowMessage('Conversion Finished!');
+  end;
 
 end;
 

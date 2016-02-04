@@ -155,12 +155,12 @@ object MainForm: TMainForm
     TabOrder = 6
   end
   object cmdStartConversion: TButton
-    Left = 350
+    Left = 168
     Height = 32
     Top = 384
     Width = 176
     Anchors = [akTop, akRight]
-    Caption = 'Start image export'
+    Caption = 'Start Image Export'
     Color = 10079385
     Font.Height = -13
     Font.Name = 'Sans'
@@ -170,7 +170,7 @@ object MainForm: TMainForm
     TabOrder = 7
   end
   object memoLog: TMemo
-    Left = 8
+    Left = 15
     Height = 148
     Top = 416
     Width = 695
@@ -178,7 +178,6 @@ object MainForm: TMainForm
     Font.Height = -11
     Font.Name = 'Courier'
     HideSelection = False
-    OnChange = memoLogChange
     ParentFont = False
     ReadOnly = True
     ScrollBars = ssAutoVertical
@@ -205,18 +204,43 @@ object MainForm: TMainForm
     TabOrder = 9
   end
   object cmdOpenDestDir: TButton
-    Left = 527
+    Left = 347
     Height = 32
     Top = 384
     Width = 176
     Anchors = [akTop, akRight]
     Caption = 'Open Destination Folder »'
+    Color = 10079436
     Enabled = False
     Font.Height = -11
     Font.Name = 'Sans'
     OnClick = cmdOpenDestDirClick
     ParentFont = False
     TabOrder = 10
+  end
+  object chkAborted: TCheckBox
+    Left = 560
+    Height = 21
+    Top = 390
+    Width = 141
+    Caption = 'Abort Image Export'
+    TabOrder = 11
+    Visible = False
+  end
+  object cmdAbortExport: TButton
+    Left = 525
+    Height = 32
+    Top = 384
+    Width = 176
+    Anchors = [akTop, akRight]
+    Caption = 'Abort Image Export'
+    Color = 10066380
+    Font.Height = -13
+    Font.Name = 'Sans'
+    Font.Style = [fsBold]
+    OnClick = cmdAbortExportClick
+    ParentFont = False
+    TabOrder = 12
   end
   object dlgSelectSrcDir: TSelectDirectoryDialog
     left = 488

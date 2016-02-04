@@ -5,10 +5,10 @@ unit Convert;
 interface
 
 uses
-  Classes, Dialogs, FileUtil, Forms, RegExpr, StrUtils, SysUtils, StringObject;
+  Classes, Dialogs, FileUtil, Forms, RegExpr, StrUtils, StdCtrls, SysUtils, StringObject;
 
 //procedure ConvertFolderStructure(srcDir: String; destDir: String);
-procedure ConvertFolderStructure(experimentDirPath: String; plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
+procedure ConvertFolderStructure(experimentDirPath: String; plateDirs: TStringList; destDir: String; logStringList: TStrings; chkAborted: TCheckBox; app: TApplication);
 function FormatDestImageName(imgFilePath: String): String;
 procedure CopyImage(imgSrcPath: String; imgDestPath: String; logStringList: TStrings; app: TApplication);
 procedure Log(LogMsg: String; logStrings: TStrings);
@@ -17,7 +17,7 @@ implementation
 
 // =============================================================================
 
-procedure ConvertFolderStructure(experimentDirPath: String; plateDirs: TStringList; destDir: String; logStringList: TStrings; app: TApplication);
+procedure ConvertFolderStructure(experimentDirPath: String; plateDirs: TStringList; destDir: String; logStringList: TStrings; chkAborted: TCheckBox; app: TApplication);
 var
   //plateDirs: TStringList;
   plateDirName: String;
@@ -171,6 +171,14 @@ begin
           imgDestPath := destPlateFolderPath + PathDelim + imgDestName;
           try
             CopyImage(imgFilePath, imgDestPath, logStringList, app);
+            app.ProcessMessages;
+            //Sleep(1); // Debug code to test the abort functionality
+            if (chkAborted.Checked) then
+            begin
+               Log('*** !!! EXPORT ABORTED !!! ***', logStringList);
+               ShowMessage('Warning: Export aborted!');
+               Exit;
+            end;
           except
             on E: Exception do
               ShowMessage('An error occured:' + LineEnding + E.Message);
@@ -229,6 +237,15 @@ begin
           imgDestName := FormatDestImageName(imgFilePath);
           imgDestPath := destTimeptDirPath + PathDelim + imgDestName;
           CopyImage(imgFilePath, imgDestPath, logStringList, app);
+           app.ProcessMessages;
+           Sleep(1);
+           if (chkAborted.Checked) then
+           begin
+              Log('*** !!! EXPORT ABORTED !!! ***', logStringList);
+              ShowMessage('Warning: Export aborted!');
+              Exit;
+           end;
+
         end;
       end;
 
@@ -242,7 +259,14 @@ begin
   // TODO: Provide better assertions that things are following the correct
   //       structure
 
-  Log('Processing finished!', logStringList);
+  if (chkAborted.Checked) then
+  begin
+    Log('Warning: Processing stopped, after abort!', logStringList);
+  end
+  else
+  begin
+    Log('Processing finished!', logStringList);
+  end;
   plateDirs.Free;
 end;
 
@@ -271,7 +295,6 @@ begin
   Log('Trying to copy file:' + LineEnding +
       'from: ' + imgSrcPath + LineEnding +
       '  to: ' + imgDestPath, logStringList);
-  app.ProcessMessages;
 
   // Do the actual copy
   if FileUtil.CopyFile(imgSrcPath, imgDestPath) then
@@ -279,7 +302,6 @@ begin
   logStringList.EndUpdate;
 
   // Make sure the UI doesn't freeze
-  app.ProcessMessages;
 end;
 
 // =============================================================================
@@ -290,7 +312,6 @@ var
 begin
   DateStr := '[' + FormatDateTime('YYYY-MM-DD, hh:mm:ss', Now) + ']';
   logStrings.Add(DateStr + ' ' + LogMsg);
-  Application.ProcessMessages;
 end;
 
 end.
