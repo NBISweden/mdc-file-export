@@ -21,6 +21,14 @@ implementation
 
 // =============================================================================
 
+type
+  TFromToPathPair = record
+    fromPath: string;
+    toPath: string;
+  end;
+
+// =============================================================================
+
 procedure ConvertFolderStructure(experimentDirPath: string;
   plateDirs: TStringList; destDir: string; logStringList: TStrings;
   progressBar: TProgressBar; chkAborted: TCheckBox; app: TApplication);
@@ -36,39 +44,36 @@ var
   plateDirParentDirPath: string;
   plateDirBarCode: string;
   plateDirExperiment: string;
-
   imgFilePaths: TStringList;
   imgFilePath: string;
-
   // Time point folder stuff
   timeptDirName: string;
   timeptDirPath: string;
   timeptDirPaths: TStringList;
-
   // Destination stuff
   destPlateFolderName: string;
   destPlateFolderPath: string;
   imgDestName: string;
   imgDestPath: string;
-
   destTimeptDirPath: string;
-
   Msg: string;
+
+  pathPairPtr: ^TFromToPathPair;
+  imagesToCopy: TList;
+
+  imgFromPath: string;
+  imgToPath: string;
 
 const
   ImagePathPatterns = '*.tif; *.TIF; *.tiff; *.TIFF';
   LogSep = '------------------------------------------------------------------------';
 
 begin
-  // Configure progressbar
-  progressBar.Min := 0;
-  progressBar.Max := plateDirs.Count;
-  progressBar.Step := 1;
-  progressBar.Position := 0;
+  imagesToCopy := TList.Create;
 
   for plateDirIdx := 0 to plateDirs.Count - 1 do
   begin
-    // Extract info
+    // Extract plate directory info
     plateDirObj := TString(plateDirs.Objects[plateDirIdx]);
     plateDirPath := plateDirObj.Text;
     plateDirName := FileUtil.ExtractFileNameOnly(plateDirPath);
@@ -165,35 +170,22 @@ begin
     imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath, ImagePathPatterns, False);
 
-    if not (imgFilePaths.Count = 0) then
+    // Handle case when plate folder contains timepoint folders
+    if (imgFilePaths.Count > 0) then
     begin
       // ----------------------------------------------------------------------
       // In case TimePoint folders do NOT exist
       // ----------------------------------------------------------------------
       for imgFilePath in imgFilePaths do
       begin
-        if not (AnsiContainsStr(imgFilePath, 'thumb')) then
-        begin
-          imgDestName := FormatDestImageName(imgFilePath);
-          imgDestPath := destPlateFolderPath + PathDelim + imgDestName;
-          try
-            CopyImage(imgFilePath, imgDestPath, logStringList, app);
-            app.ProcessMessages; // Update UI, so it doesn't freeze
-            if (chkAborted.Checked) then
-            begin
-              Log('*** !!! EXPORT ABORTED !!! ***', logStringList);
-              ShowMessage('Warning: Export aborted!');
-              Exit;
-            end;
-          except
-            on E: Exception do
-              ShowMessage('An error occured:' + LineEnding + E.Message);
-          end;
-        end
-        else
-        begin
-          Log('Skipping thumbnail: ' + imgFilePath, logStringList);
-        end;
+        imgDestName := FormatDestImageName(imgFilePath);
+        imgDestPath := destPlateFolderPath + PathDelim + imgDestName;
+
+        // TODO: Make the below into a function
+        new(pathPairPtr);
+        pathPairPtr^.fromPath := imgFilePath;
+        pathPairPtr^.toPath := imgDestPath;
+        imagesToCopy.Add(pathPairPtr);
       end;
     end
     else
@@ -218,11 +210,8 @@ begin
 
       for timeptDirPath in timeptDirPaths do
       begin
-        imgFilePaths.Clear;
-
         timeptDirName := FileUtil.ExtractFileNameOnly(timeptDirPath);
         Log('Now processing: ' + timeptDirName, logStringList);
-
         // Create timepoint folder in dest folder ...
         destTimeptDirPath := destPlateFolderPath + PathDelim + timeptDirName;
         try
@@ -237,45 +226,68 @@ begin
           end;
         end;
 
-        imgFilePaths := FileUtil.FindAllFiles(timeptDirPath, ImagePathPatterns, False);
+        // Add image paths from time point dir
+        imgFilePaths.AddStrings(FileUtil.FindAllFiles(timeptDirPath,
+          ImagePathPatterns, False));
+
         for imgFilePath in imgFilePaths do
         begin
           imgDestName := FormatDestImageName(imgFilePath);
           imgDestPath := destTimeptDirPath + PathDelim + imgDestName;
-          CopyImage(imgFilePath, imgDestPath, logStringList, app);
-          app.ProcessMessages; // Update UI, so it doesn't freeze
-          if (chkAborted.Checked) then
-          begin
-            Log('*** !!! EXPORT ABORTED !!! ***', logStringList);
-            ShowMessage('Warning: Export aborted!');
-            Exit;
-          end;
 
+          // TODO: Make the below into a function
+          new(pathPairPtr);
+          pathPairPtr^.fromPath := imgFilePath;
+          pathPairPtr^.toPath := imgDestPath;
+          imagesToCopy.Add(pathPairPtr);
         end;
       end;
-
       timeptDirPaths.Free;
-      // ----------------------------------------------------------------------
     end;
-
-    // Step up the progressbar
-    progressBar.Position := plateDirIdx + 1;
 
     imgFilePaths.Free;
   end;
 
+  // Initialize progressbar
+  progressBar.Min := 0;
+  progressBar.Max := imagesToCopy.Count;
+  progressBar.Step := 1;
+  progressBar.Position := 0;
+
+  // Copy images
+  for pathPairPtr in imagesToCopy do
+  begin
+    imgFromPath := pathPairPtr^.fromPath;
+    imgToPath := pathPairPtr^.toPath;
+
+    if (AnsiContainsStr(imgFromPath, 'thumb')) then // Don't include thumbnails
+    begin
+      Log('Skipping thumbnail: ' + imgFromPath, logStringList);
+    end
+    else
+    begin
+      try
+        CopyImage(imgFromPath, imgToPath, logStringList, app);
+        app.ProcessMessages; // Update UI, so it doesn't freeze
+        if (chkAborted.Checked) then // Abort, if abort button is pressed
+        begin
+          Log('*** !!! WARNING: EXPORT ABORTED !!! ***', logStringList);
+          ShowMessage('Warning: Export aborted!');
+          Exit;
+        end;
+      except
+        on E: Exception do
+          ShowMessage('An error occured:' + LineEnding + E.Message);
+      end;
+    end;
+    progressBar.StepBy(1); // We need to step up both for thumbnails and normal images, to reach 100%
+  end;
+
   // TODO: Provide better assertions that things are following the correct
   //       structure
-
-  if (chkAborted.Checked) then
-  begin
-    Log('Warning: Processing stopped, after abort!', logStringList);
-  end
-  else
-  begin
-    Log('Processing finished!', logStringList);
-  end;
+  Log('Processing finished!', logStringList);
   plateDirs.Free;
+  imagesToCopy.Free;
 end;
 
 // =============================================================================
