@@ -181,14 +181,12 @@ begin
       timeptDirPaths := TStringList.Create;
       timeptDirPaths := FileUtil.FindAllDirectories(plateDirPath, False);
 
-      // Handle the case that no timepoint folders were found either.
+      // Handle the case that no timepoint folders were found either
       if timeptDirPaths.Count = 0 then
       begin
         Msg := 'Directory contains nether *.tif files, nor time point ' +
           'directories, so skipping!';
         Log(Msg, logStringList);
-        ShowMessage(Msg);
-        Exit;
       end;
 
       for timeptDirPath in timeptDirPaths do
