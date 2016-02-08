@@ -14,7 +14,7 @@ type
 
   TMainForm = class(TForm)
     chkAborted: TCheckBox;
-    cmdOpenDestDir: TButton;
+    cmdOpenExportDir: TButton;
     cmdStartConversion: TButton;
     chkSelectPlates: TCheckBox;
     cmdAbortExport: TButton;
@@ -22,24 +22,24 @@ type
     memoLog: TMemo;
     prgbarMain: TProgressBar;
     txtSourceDir: TEdit;
-    txtDestDir: TEdit;
+    txtExportDir: TEdit;
     groupBoxSelectPlates: TGroupBox;
     cmdSelectSrcDir: TButton;
-    cmdSelectDestDir: TButton;
+    cmdSelectExportDir: TButton;
     lblSrcDir: TLabel;
-    lblDestDir: TLabel;
+    lblExportDir: TLabel;
     lstPlates: TListBox;
     lstExperiments: TListBox;
-    dlgSelectDestDir: TSelectDirectoryDialog;
+    dlgSelectExportDir: TSelectDirectoryDialog;
     progressConversion: TProgressBar;
     lblSelectExperimen: TLabel;
     dlgSelectSrcDir: TSelectDirectoryDialog;
     procedure chkSelectPlatesChange(Sender: TObject);
     procedure cmdAbortExportClick(Sender: TObject);
-    procedure cmdOpenDestDirClick(Sender: TObject);
-    procedure cmdSelectDestDirClick(Sender: TObject);
+    procedure cmdOpenExportDirClick(Sender: TObject);
+    procedure cmdSelectExportDirClick(Sender: TObject);
     procedure cmdStartConversionClick(Sender: TObject);
-    procedure txtDestDirChange(Sender: TObject);
+    procedure txtExportDirChange(Sender: TObject);
     procedure txtSourceDirectoryChange(Sender: TObject);
     procedure cmdSelectSrcDirClick(Sender: TObject);
     procedure lstExperimentsSelectionChange(Sender: TObject; User: boolean);
@@ -191,11 +191,11 @@ begin
   end;
 end;
 
-procedure TMainForm.cmdSelectDestDirClick(Sender: TObject);
+procedure TMainForm.cmdSelectExportDirClick(Sender: TObject);
 begin
-  if dlgSelectDestDir.Execute then
+  if dlgSelectExportDir.Execute then
   begin
-    txtDestDir.Text := dlgSelectDestDir.FileName;
+    txtExportDir.Text := dlgSelectExportDir.FileName;
   end;
 end;
 
@@ -214,17 +214,17 @@ begin
   cmdAbortExport.Caption := 'Aborting ...';
 end;
 
-procedure TMainForm.cmdOpenDestDirClick(Sender: TObject);
+procedure TMainForm.cmdOpenExportDirClick(Sender: TObject);
 begin
-  OpenDocument(txtDestDir.Text);
+  OpenDocument(txtExportDir.Text);
 end;
 
-procedure TMainForm.txtDestDirChange(Sender: TObject);
+procedure TMainForm.txtExportDirChange(Sender: TObject);
 begin
-  txtDestDir.Enabled := True;
-  if (txtDestDir.Text <> '') then
+  txtExportDir.Enabled := True;
+  if (txtExportDir.Text <> '') then
   begin
-    cmdOpenDestDir.Enabled := True;
+    cmdOpenExportDir.Enabled := True;
   end;
 end;
 
@@ -232,6 +232,7 @@ procedure TMainForm.cmdStartConversionClick(Sender: TObject);
 var
   plateDirs: TStringList;
   i: integer;
+  destDirPath: String;
 begin
   // Restore abortion button and (hidden checkbox) states:
   chkAborted.Checked := False;
@@ -243,32 +244,32 @@ begin
   // ----------------
 
   // Check if source and destination paths are the same
-  if Pos(txtSourceDir.Text, txtDestDir.Text) > 0 then
+  if Pos(txtSourceDir.Text, txtExportDir.Text) > 0 then
   begin
     ShowMessage('The destination directory must not be placed under the ' +
       'Source directory!');
-    exit;
+    Exit;
   end;
 
   // Source directory must be set
   if Length(txtSourceDir.Text) = 0 then
   begin
     ShowMessage('Source directory is not set!');
-    exit;
+    Exit;
   end;
 
   // Destination directory must be set
-  if Length(txtDestDir.Text) = 0 then
+  if Length(txtExportDir.Text) = 0 then
   begin
-    ShowMessage('Destination directory is empty!');
-    exit;
+    ShowMessage('Destination directory is not set!');
+    Exit;
   end;
 
   // At least one experiment has to be selected
   if (lstExperiments.SelCount = 0) then
   begin
     ShowMessage('At least one Experiment has to be selected!');
-    exit;
+    Exit;
   end;
 
   // Plates have to be selected, if enabled
@@ -276,32 +277,49 @@ begin
   begin
     ShowMessage('At least one plate has to be selected, when the ' +
       '"Select specific plates" checkbox is selected.');
-    exit;
+    Exit;
   end;
 
   // Destination directory has to be writeable
   try
-    if not FileUtil.DirectoryIsWritable(txtDestDir.Text) then
+    if not FileUtil.DirectoryIsWritable(txtExportDir.Text) then
     begin
       ShowMessage('Destination directory is not writable!');
-      exit;
+      Exit;
     end;
   except
     on E: Exception do
+    begin
       ShowMessage('Error on checking if directory is writable:' +
-        LineEnding + txtDestDir.Text + LineEnding + 'Error message: ' +
+        LineEnding + txtExportDir.Text + LineEnding + 'Error message: ' +
         E.Message);
+    Exit;
+    end;
+  end;
 
+  // create a date-stamped destination directory
 
+  destDirPath := txtExportDir.Text + DirectorySeparator + 'MDCExport-' + FormatDateTime('YYYYMMDD-hhmmss', Now);
+  if not SysUtils.DirectoryExists(destDirPath) then
+  begin
+    try
+      SysUtils.CreateDir(destDirPath);
+    except
+      on E: Exception do
+      begin
+        ShowMessage(E.Message);
+        Exit;
+      end;
+    end;
   end;
 
   // Destination directory must be empty
-  if not ((FileUtil.FindAllDirectories(txtDestDir.Text).Count = 0) and
-    (FileUtil.FindAllFiles(txtDestDir.Text).Count = 0)) then
-  begin
-    ShowMessage('Destination directory is not empty!');
-    exit;
-  end;
+  // if not ((FileUtil.FindAllDirectories(txtExportDir.Text).Count = 0) and
+  //  (FileUtil.FindAllFiles(txtExportDir.Text).Count = 0)) then
+  //begin
+  //  ShowMessage('Destination directory is not empty!');
+  //  exit;
+  //end;
 
   // TODO: Add checks for folder structure in source folder!
 
@@ -319,7 +337,7 @@ begin
   memoLog.Clear; // In case of a restart, so we don't mix up multiple things...
 
   //prgbarMain.Style := pbstMarquee;
-  ConvertFolderStructure(txtSourceDir.Text, plateDirs, txtDestDir.Text,
+  ConvertFolderStructure(txtSourceDir.Text, plateDirs, destDirPath,
     memoLog.Lines, prgbarMain, chkAborted, Application);
 
   if (chkAborted.Checked) then

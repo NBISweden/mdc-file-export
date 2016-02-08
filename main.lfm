@@ -116,7 +116,7 @@ object MainForm: TMainForm
       TopIndex = -1
     end
   end
-  object txtDestDir: TEdit
+  object txtExportDir: TEdit
     Left = 8
     Height = 25
     Top = 360
@@ -125,7 +125,7 @@ object MainForm: TMainForm
     Enabled = False
     Font.Height = -12
     Font.Name = 'Sans'
-    OnChange = txtDestDirChange
+    OnChange = txtExportDirChange
     ParentFont = False
     ReadOnly = True
     TabOrder = 5
@@ -134,8 +134,8 @@ object MainForm: TMainForm
     Left = 8
     Height = 16
     Top = 344
-    Width = 114
-    Caption = 'Destination Folder:'
+    Width = 548
+    Caption = 'Export Folder (a date-stamped subfolder is automatically created in this folder on export): '
     Font.Height = -12
     Font.Name = 'Sans'
     ParentColor = False
@@ -150,7 +150,7 @@ object MainForm: TMainForm
     Caption = '...'
     Font.Height = -12
     Font.Name = 'Sans'
-    OnClick = cmdSelectDestDirClick
+    OnClick = cmdSelectExportDirClick
     ParentFont = False
     TabOrder = 6
   end
@@ -203,7 +203,7 @@ object MainForm: TMainForm
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 9
   end
-  object cmdOpenDestDir: TButton
+  object cmdOpenExportDir: TButton
     Left = 347
     Height = 32
     Top = 384
@@ -214,7 +214,7 @@ object MainForm: TMainForm
     Enabled = False
     Font.Height = -11
     Font.Name = 'Sans'
-    OnClick = cmdOpenDestDirClick
+    OnClick = cmdOpenExportDirClick
     ParentFont = False
     TabOrder = 10
   end
@@ -246,7 +246,7 @@ object MainForm: TMainForm
     left = 488
     top = 8
   end
-  object dlgSelectDestDir: TSelectDirectoryDialog
+  object dlgSelectExportDir: TSelectDirectoryDialog
     InitialDir = '~/'
     left = 464
     top = 336
