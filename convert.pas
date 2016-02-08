@@ -64,6 +64,7 @@ begin
   progressBar.Min := 0;
   progressBar.Max := plateDirs.Count;
   progressBar.Step := 1;
+  progressBar.Position:=0;
 
   for i := 0 to plateDirs.Count - 1 do
   begin
