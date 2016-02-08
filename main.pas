@@ -125,8 +125,7 @@ begin
           objPlateDir := TString.Create;
           objPlateDir.Text := PlateDir;
           lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) +
-            ' | Experiment: ' + Experiment +
-            ' | Date: ' + Date, objPlateDir);
+            ' | Experiment: ' + Experiment + ' | Date: ' + Date, objPlateDir);
         end;
       end
       else
@@ -146,9 +145,8 @@ begin
               objPlateDir := TString.Create;
               objPlateDir.Text := PlateDir;
               lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) +
-                ' | Experiment: ' + Experiment +
-                ' | Barcode: ' + BarCode +
-                ' | Date: ' + Date, objPlateDir);
+                ' | Experiment: ' + Experiment + ' | Barcode: ' +
+                BarCode + ' | Date: ' + Date, objPlateDir);
             end;
           end
           else
@@ -291,8 +289,10 @@ begin
   except
     on E: Exception do
       ShowMessage('Error on checking if directory is writable:' +
-        LineEnding + txtDestDir.Text + LineEnding +
-        'Error message: ' + E.Message);
+        LineEnding + txtDestDir.Text + LineEnding + 'Error message: ' +
+        E.Message);
+
+
   end;
 
   // Destination directory must be empty

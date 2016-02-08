@@ -170,7 +170,7 @@ object MainForm: TMainForm
     TabOrder = 7
   end
   object memoLog: TMemo
-    Left = 15
+    Left = 8
     Height = 148
     Top = 416
     Width = 695
