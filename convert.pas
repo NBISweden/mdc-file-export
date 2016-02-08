@@ -5,12 +5,13 @@ unit Convert;
 interface
 
 uses
-  Classes, Dialogs, FileUtil, Forms, RegExpr, StrUtils, StdCtrls, SysUtils, StringObject;
+  Classes, ComCtrls, Dialogs, FileUtil, Forms, RegExpr, StrUtils,
+  StdCtrls, SysUtils, StringObject;
 
 //procedure ConvertFolderStructure(srcDir: String; destDir: String);
 procedure ConvertFolderStructure(experimentDirPath: string;
   plateDirs: TStringList; destDir: string; logStringList: TStrings;
-  chkAborted: TCheckBox; app: TApplication);
+  progressBar: TProgressBar; chkAborted: TCheckBox; app: TApplication);
 function FormatDestImageName(imgFilePath: string): string;
 procedure CopyImage(imgSrcPath: string; imgDestPath: string;
   logStringList: TStrings; app: TApplication);
@@ -22,7 +23,7 @@ implementation
 
 procedure ConvertFolderStructure(experimentDirPath: string;
   plateDirs: TStringList; destDir: string; logStringList: TStrings;
-  chkAborted: TCheckBox; app: TApplication);
+  progressBar: TProgressBar; chkAborted: TCheckBox; app: TApplication);
 var
   //plateDirs: TStringList;
   plateDirName: string;
@@ -59,6 +60,11 @@ const
   LogSep = '------------------------------------------------------------------------';
 
 begin
+  // Configure progressbar
+  progressBar.Min := 0;
+  progressBar.Max := plateDirs.Count;
+  progressBar.Step := 1;
+
   for i := 0 to plateDirs.Count - 1 do
   begin
     // ------------------------------------------------------------------------
@@ -103,18 +109,16 @@ begin
 
     if (plateDirBarCode <> '') then
     begin
-      Msg := 'Now processing:' + LineEnding + LogSep +
-        LineEnding + 'Experiment: ' + plateDirExperiment +
-        LineEnding + 'Bar code:   ' + plateDirBarCode + LineEnding +
-        'Plate dir:  ' + plateDirName + LineEnding +
-        'Date:       ' + plateDirDate + LineEnding + LogSep;
+      Msg := 'Now processing:' + LineEnding + LogSep + LineEnding +
+        'Experiment: ' + plateDirExperiment + LineEnding + 'Bar code:   ' +
+        plateDirBarCode + LineEnding + 'Plate dir:  ' + plateDirName +
+        LineEnding + 'Date:       ' + plateDirDate + LineEnding + LogSep;
     end
     else
     begin
-      Msg := 'Now processing:' + LineEnding + LogSep +
-        LineEnding + 'Experiment: ' + plateDirExperiment +
-        LineEnding + 'Plate dir:  ' + plateDirName + LineEnding +
-        'Date:       ' + plateDirDate + LineEnding + LogSep;
+      Msg := 'Now processing:' + LineEnding + LogSep + LineEnding +
+        'Experiment: ' + plateDirExperiment + LineEnding + 'Plate dir:  ' +
+        plateDirName + LineEnding + 'Date:       ' + plateDirDate + LineEnding + LogSep;
     end;
     Log(Msg, logStringList);
 
@@ -125,15 +129,15 @@ begin
     if (plateDirBarCode <> '') then
     begin
       destPlateFolderName := StringReplace(plateDirExperiment, ' ',
-        '_', [rfReplaceAll]) + '.barcode_' +
-        StringReplace(plateDirBarCode, ' ', '_', [rfReplaceAll]) +
-        '.plate_' + plateNo + '.' + plateDirDate;
+        '_', [rfReplaceAll]) + '.barcode_' + StringReplace(
+        plateDirBarCode, ' ', '_', [rfReplaceAll]) + '.plate_' +
+        plateNo + '.' + plateDirDate;
     end
     else
     begin
       destPlateFolderName := StringReplace(plateDirExperiment, ' ',
-        '_', [rfReplaceAll]) + '.plate_' + plateNo +
-        '.' + plateDirDate;
+        '_', [rfReplaceAll]) + '.plate_' + plateNo + '.' + plateDirDate;
+
     end;
 
     destPlateFolderPath := destDir + DirectorySeparator + destPlateFolderName;
@@ -162,7 +166,6 @@ begin
     imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath, ImagePathPatterns, False);
 
-    // TODO: Remember to check for possible "timepoint" folders here
     if not (imgFilePaths.Count = 0) then
     begin
       // ----------------------------------------------------------------------
@@ -259,6 +262,10 @@ begin
     end;
 
     imgFilePaths.Free;
+
+    // Step up the progressbar
+    progressBar.StepBy(1);
+    progressBar.Update;
   end;
 
   // TODO: Provide better assertions that things are following the correct

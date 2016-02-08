@@ -318,11 +318,9 @@ begin
 
   memoLog.Clear; // In case of a restart, so we don't mix up multiple things...
 
-  prgbarMain.Style := pbstMarquee;
+  //prgbarMain.Style := pbstMarquee;
   ConvertFolderStructure(txtSourceDir.Text, plateDirs, txtDestDir.Text,
-    memoLog.Lines, chkAborted, Application);
-  prgbarMain.Style := pbstNormal;
-  prgbarMain.Update;
+    memoLog.Lines, prgbarMain, chkAborted, Application);
 
   if (chkAborted.Checked) then
   begin
