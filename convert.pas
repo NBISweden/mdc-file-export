@@ -299,15 +299,18 @@ end;
 procedure CopyImage(imgSrcPath: string; imgDestPath: string;
   logStringList: TStrings; app: TApplication);
 begin
-  // Log paths to be copied
-  logStringList.BeginUpdate;
-  Log('Trying to copy file:' + LineEnding + 'from: ' + imgSrcPath +
-    LineEnding + '  to: ' + imgDestPath, logStringList);
+  try
+    // Log paths to be copied
+    logStringList.BeginUpdate;
+    Log('Trying to copy file:' + LineEnding + 'from: ' + imgSrcPath +
+      LineEnding + '  to: ' + imgDestPath, logStringList);
 
-  // Do the actual copy
-  if FileUtil.CopyFile(imgSrcPath, imgDestPath) then
-    Log('Copy successful!', logStringList);
-  logStringList.EndUpdate;
+    // Do the actual copy
+    if FileUtil.CopyFile(imgSrcPath, imgDestPath) then
+      Log('Copy successful!', logStringList);
+  finally
+    logStringList.EndUpdate;
+  end;
 end;
 
 // =============================================================================
