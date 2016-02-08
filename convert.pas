@@ -70,6 +70,7 @@ const
 
 begin
   imagesToCopy := TList.Create;
+  imgFilePaths := TStringList.Create;
 
   for plateDirIdx := 0 to plateDirs.Count - 1 do
   begin
@@ -155,10 +156,8 @@ begin
     end;
 
     // Loop over image files in plate directory
-    imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath, ImagePathPatterns, False);
 
-    // Handle case when plate folder contains timepoint folders
     if (imgFilePaths.Count > 0) then
     begin
       for imgFilePath in imgFilePaths do
@@ -172,6 +171,7 @@ begin
         pathPairPtr^.toPath := imgDestPath;
         imagesToCopy.Add(pathPairPtr);
       end;
+      imgFilePaths.Clear;
     end
     else
     begin
@@ -194,7 +194,7 @@ begin
       for timeptDirPath in timeptDirPaths do
       begin
         timeptDirName := FileUtil.ExtractFileNameOnly(timeptDirPath);
-        Log('Now processing: ' + timeptDirName, logStringList);
+        Log('Now processing timepoint: ' + timeptDirName, logStringList);
         // Create timepoint folder in dest folder ...
         destTimeptDirPath := destPlateFolderPath + PathDelim + timeptDirName;
         try
@@ -224,12 +224,15 @@ begin
           pathPairPtr^.toPath := imgDestPath;
           imagesToCopy.Add(pathPairPtr);
         end;
+        imgFilePaths.Clear;
+
       end;
-      timeptDirPaths.Free;
+      timeptDirPaths.Clear;
     end;
 
-    imgFilePaths.Free;
   end;
+  timeptDirPaths.Free;
+  imgFilePaths.Free;
 
   // Initialize progressbar
   progressBar.Min := 0;
@@ -254,7 +257,7 @@ begin
         app.ProcessMessages; // Update UI, so it doesn't freeze
         if (chkAborted.Checked) then // Abort, if abort button is pressed
         begin
-          Log('*** !!! WARNING: EXPORT ABORTED !!! ***', logStringList);
+          Log('*** WARNING: EXPORT ABORTED ***', logStringList);
           ShowMessage('Warning: Export aborted!');
           Exit;
         end;
@@ -263,12 +266,13 @@ begin
           ShowMessage('An error occured:' + LineEnding + E.Message);
       end;
     end;
-    progressBar.StepBy(1); // We need to step up both for thumbnails and normal images, to reach 100%
+    progressBar.StepBy(1);
+    // We need to step up both for thumbnails and normal images, to reach 100%
   end;
 
   // TODO: Provide better assertions that things are following the correct
   //       structure
-  Log('Processing finished!', logStringList);
+  Log('Export finished!', logStringList);
   plateDirs.Free;
   imagesToCopy.Free;
 end;
@@ -304,8 +308,6 @@ begin
   if FileUtil.CopyFile(imgSrcPath, imgDestPath) then
     Log('Copy successful!', logStringList);
   logStringList.EndUpdate;
-
-  // Make sure the UI doesn't freeze
 end;
 
 // =============================================================================

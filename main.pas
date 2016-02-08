@@ -346,7 +346,7 @@ begin
   end
   else
   begin
-    ShowMessage('Conversion Finished!');
+    ShowMessage('Export Finished!');
   end;
 
 end;
