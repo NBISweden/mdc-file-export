@@ -209,10 +209,10 @@ object MainForm: TMainForm
     Top = 384
     Width = 176
     Anchors = [akTop, akRight]
-    Caption = 'Open Destination Folder »'
+    Caption = 'Open Export Folder »'
     Color = 10079436
     Enabled = False
-    Font.Height = -11
+    Font.Height = -12
     Font.Name = 'Sans'
     OnClick = cmdOpenExportDirClick
     ParentFont = False
