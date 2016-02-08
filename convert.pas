@@ -69,8 +69,8 @@ const
   LogSep = '------------------------------------------------------------------------';
 
 begin
-  imagesToCopy := TList.Create;
   imgFilePaths := TStringList.Create;
+  imagesToCopy := TList.Create;
 
   for plateDirIdx := 0 to plateDirs.Count - 1 do
   begin
@@ -156,6 +156,7 @@ begin
     end;
 
     // Loop over image files in plate directory
+    imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath, ImagePathPatterns, False);
 
     if (imgFilePaths.Count > 0) then
@@ -171,7 +172,7 @@ begin
         pathPairPtr^.toPath := imgDestPath;
         imagesToCopy.Add(pathPairPtr);
       end;
-      imgFilePaths.Clear;
+      imgFilePaths.Free;
     end
     else
     begin
@@ -180,7 +181,6 @@ begin
 
       timeptDirPaths := TStringList.Create;
       timeptDirPaths := FileUtil.FindAllDirectories(plateDirPath, False);
-
       // Handle the case that no timepoint folders were found either
       if timeptDirPaths.Count = 0 then
       begin
@@ -208,6 +208,7 @@ begin
         end;
 
         // Add image paths from time point dir
+        imgFilePaths := TStringList.Create;
         imgFilePaths.AddStrings(FileUtil.FindAllFiles(timeptDirPath,
           ImagePathPatterns, False));
 
@@ -222,15 +223,13 @@ begin
           pathPairPtr^.toPath := imgDestPath;
           imagesToCopy.Add(pathPairPtr);
         end;
-        imgFilePaths.Clear;
-
+        imgFilePaths.Free;
       end;
-      timeptDirPaths.Clear;
+      timeptDirPaths.Free;
+
     end;
 
   end;
-  timeptDirPaths.Free;
-  imgFilePaths.Free;
 
   // Initialize progressbar
   progressBar.Min := 0;
