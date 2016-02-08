@@ -180,8 +180,7 @@ begin
           imgDestPath := destPlateFolderPath + PathDelim + imgDestName;
           try
             CopyImage(imgFilePath, imgDestPath, logStringList, app);
-            app.ProcessMessages;
-            //Sleep(1); // Debug code to test the abort functionality
+            app.ProcessMessages; // Update UI, so it doesn't freeze
             if (chkAborted.Checked) then
             begin
               Log('*** !!! EXPORT ABORTED !!! ***', logStringList);
@@ -246,8 +245,7 @@ begin
           imgDestName := FormatDestImageName(imgFilePath);
           imgDestPath := destTimeptDirPath + PathDelim + imgDestName;
           CopyImage(imgFilePath, imgDestPath, logStringList, app);
-          app.ProcessMessages;
-          Sleep(1);
+          app.ProcessMessages; // Update UI, so it doesn't freeze
           if (chkAborted.Checked) then
           begin
             Log('*** !!! EXPORT ABORTED !!! ***', logStringList);
