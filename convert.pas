@@ -27,7 +27,7 @@ procedure ConvertFolderStructure(experimentDirPath: string;
 var
   //plateDirs: TStringList;
   plateDirName: string;
-  i: integer;
+  plateDirIdx: integer;
   plateDirObj: TString;
   plateDirPath: string;
   plateNo: string;
@@ -64,14 +64,12 @@ begin
   progressBar.Min := 0;
   progressBar.Max := plateDirs.Count;
   progressBar.Step := 1;
-  progressBar.Position:=0;
+  progressBar.Position := 0;
 
-  for i := 0 to plateDirs.Count - 1 do
+  for plateDirIdx := 0 to plateDirs.Count - 1 do
   begin
-    // ------------------------------------------------------------------------
     // Extract info
-    // ------------------------------------------------------------------------
-    plateDirObj := TString(plateDirs.Objects[i]);
+    plateDirObj := TString(plateDirs.Objects[plateDirIdx]);
     plateDirPath := plateDirObj.Text;
     plateDirName := FileUtil.ExtractFileNameOnly(plateDirPath);
 
@@ -260,11 +258,10 @@ begin
       // ----------------------------------------------------------------------
     end;
 
-    imgFilePaths.Free;
-
     // Step up the progressbar
-    progressBar.StepBy(1);
-    progressBar.Update;
+    progressBar.Position := plateDirIdx + 1;
+
+    imgFilePaths.Free;
   end;
 
   // TODO: Provide better assertions that things are following the correct
