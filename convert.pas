@@ -86,31 +86,27 @@ begin
     plateDirParentDirPath := SysUtils.ExtractFilePath(
       FileUtil.ChompPathDelim(plateDirDateDirPath));
 
-    // *** BEGIN: DEBUG CODE ***
-    //Msg := LogSep + LineEnding +
-    //       'plateDirParentDirPath: ' + plateDirParentDirPath + LineEnding +
-    //       'experimentDirPath: ' + experimentDirPath + LineEnding +
-    //       LogSep + LineEnding;
-    //Log(Msg, logStringList);
-    // *** END: DEBUG CODE ***
-
     // Check if the parent folder of the plate dir is the experiment folder
     if (FileUtil.ChompPathDelim(plateDirParentDirPath) =
       FileUtil.ChompPathDelim(experimentDirPath)) then
     begin
+      // ... if so, extract the experiment folder path directly
       plateDirExperiment := FileUtil.ExtractFileNameOnly(
         FileUtil.ChompPathDelim(plateDirParentDirPath));
     end
     else
     begin
+      // ... else, get the barcode dir ...
       plateDirBarCode := FileUtil.ExtractFileNameOnly(
         FileUtil.ChompPathDelim(plateDirParentDirPath));
+      // ... and then the experiment dir.
       plateDirExperiment := FileUtil.ExtractFileNameOnly(
         FileUtil.ChompPathDelim(SysUtils.ExtractFilePath(
         FileUtil.ChompPathDelim(plateDirParentDirPath))));
     end;
 
-
+    // Write a message telling that we are starting to process an experiment
+    // folder, or an experiment/barcode folder combination.
     if (plateDirBarCode <> '') then
     begin
       Msg := 'Now processing:' + LineEnding + LogSep + LineEnding +
@@ -126,10 +122,7 @@ begin
     end;
     Log(Msg, logStringList);
 
-    // ------------------------------------------------------------------------
-    // Create folder
-    // ------------------------------------------------------------------------
-
+    // Configure destination plate folder path
     if (plateDirBarCode <> '') then
     begin
       destPlateFolderName := StringReplace(plateDirExperiment, ' ',
@@ -141,16 +134,12 @@ begin
     begin
       destPlateFolderName := StringReplace(plateDirExperiment, ' ',
         '_', [rfReplaceAll]) + '.plate_' + plateNo + '.' + plateDirDate;
-
     end;
-
     destPlateFolderPath := destDir + DirectorySeparator + destPlateFolderName;
 
+    // Create the destination plate folder structure
     if not SysUtils.DirectoryExists(destPlateFolderPath) then
     begin
-      // -----------------------------------------------------------------------
-      // Create destination folder structure
-      // -----------------------------------------------------------------------
       Log('Trying to create folder:', logStringList);
       Log(destPlateFolderPath, logStringList);
       try
@@ -165,7 +154,6 @@ begin
       end;
     end;
 
-
     // Loop over image files in plate directory
     imgFilePaths := TStringList.Create;
     imgFilePaths := FileUtil.FindAllFiles(plateDirPath, ImagePathPatterns, False);
@@ -173,9 +161,6 @@ begin
     // Handle case when plate folder contains timepoint folders
     if (imgFilePaths.Count > 0) then
     begin
-      // ----------------------------------------------------------------------
-      // In case TimePoint folders do NOT exist
-      // ----------------------------------------------------------------------
       for imgFilePath in imgFilePaths do
       begin
         imgDestName := FormatDestImageName(imgFilePath);
@@ -190,15 +175,13 @@ begin
     end
     else
     begin
-      // ----------------------------------------------------------------------
-      // In case TimePoint folders DO exist
-      // ----------------------------------------------------------------------
       Log('No *.tif images in plate dir, so assuming to contain timepoints: ' +
         LineEnding + plateDirPath, logStringList);
 
       timeptDirPaths := TStringList.Create;
-
       timeptDirPaths := FileUtil.FindAllDirectories(plateDirPath, False);
+
+      // Handle the case that no timepoint folders were found either.
       if timeptDirPaths.Count = 0 then
       begin
         Msg := 'Directory contains nether *.tif files, nor time point ' +
