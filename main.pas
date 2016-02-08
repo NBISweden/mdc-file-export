@@ -63,31 +63,31 @@ implementation
 procedure TMainForm.lstExperimentsSelectionChange(Sender: TObject; User: boolean);
 var
   ExperimentDirs: TStringList;
-  ExperimentDir: String;
-  Experiment: String;
+  ExperimentDir: string;
+  Experiment: string;
 
   ExperimentSubDirs: TStringList;
-  ExperimentSubDir: String;
+  ExperimentSubDir: string;
 
   BarCodeDirs: TStringList;
-  BarCodeDir: String;
-  BarCode: String;
-  BarCodeExists: Boolean;
+  BarCodeDir: string;
+  BarCode: string;
+  BarCodeExists: boolean;
 
   DateDirs: TStringList;
-  DateDir: String;
-  Date: String;
+  DateDir: string;
+  Date: string;
   DatePtrn: TRegExpr;
 
-  PlateDir: String;
+  PlateDir: string;
   objPlateDir: TString;
-  i: Integer;
+  i: integer;
 begin
   lstPlates.Clear;
   BarCodeExists := False;
 
   ExperimentDirs := TStringList.Create;
-  for i:=0 to lstExperiments.Items.Count-1 do
+  for i := 0 to lstExperiments.Items.Count - 1 do
   begin
     // Process only the selected items in the experiments listbox
     if lstExperiments.Selected[i] then
@@ -114,9 +114,9 @@ begin
     for ExperimentSubDir in ExperimentSubDirs do
     begin
       if DatePtrn.Exec(ExperimentSubDir) then
-      // -----------------------------------------------------------------------
-      // CASE: DATE FOLDER
-      // -----------------------------------------------------------------------
+        // -----------------------------------------------------------------------
+        // CASE: DATE FOLDER
+        // -----------------------------------------------------------------------
       begin
         Date := FileUtil.ExtractFileNameOnly(ExperimentSubDir);
         // Populate plates listbox with the plates (TODO: Use more than PlateDir no as ID?)
@@ -125,30 +125,36 @@ begin
           objPlateDir := TString.Create;
           objPlateDir.Text := PlateDir;
           lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) +
-                            ' | Experiment: ' + Experiment +
-                            ' | Date: ' + Date, objPlateDir);
+            ' | Experiment: ' + Experiment +
+            ' | Date: ' + Date, objPlateDir);
         end;
       end
-      else begin
+      else
+      begin
         // -----------------------------------------------------------------------
         // CASE: NOT DATE FOLDER (IMPLICITLY ASSUME BARCODE FOLDER?)
         // -----------------------------------------------------------------------
         BarCodeExists := True;
         BarCode := FileUtil.ExtractFileNameOnly(ExperimentSubDir);
-        for DateDir in FileUtil.FindAllDirectories(ExperimentSubDir, False) do begin
+        for DateDir in FileUtil.FindAllDirectories(ExperimentSubDir, False) do
+        begin
           Date := FileUtil.ExtractFileNameOnly(DateDir);
-          if DatePtrn.Exec(Date) then begin
-            for PlateDir in FileUtil.FindAllDirectories(DateDir, False) do begin
+          if DatePtrn.Exec(Date) then
+          begin
+            for PlateDir in FileUtil.FindAllDirectories(DateDir, False) do
+            begin
               objPlateDir := TString.Create;
               objPlateDir.Text := PlateDir;
               lstPlates.AddItem('Plate: ' + SysUtils.ExtractFileName(PlateDir) +
-                                ' | Experiment: ' + Experiment +
-                                ' | Barcode: ' + BarCode +
-                                ' | Date: ' + Date, objPlateDir);
+                ' | Experiment: ' + Experiment +
+                ' | Barcode: ' + BarCode +
+                ' | Date: ' + Date, objPlateDir);
             end;
           end
-          else begin
-              ShowMessage('Warning: Subfolder of barcode dir is not a date: ' + DateDir + '!');
+          else
+          begin
+            ShowMessage('Warning: Subfolder of barcode dir is not a date: ' +
+              DateDir + '!');
           end;
         end;
         // ShowMessage('Folder is not a date: ' + ExperimentSubDir);
@@ -161,7 +167,7 @@ end;
 
 procedure TMainForm.txtSourceDirectoryChange(Sender: TObject);
 var
-  Exp: String;
+  Exp: string;
   Experiments: TStringList;
 begin
   lstExperiments.Clear;
@@ -174,7 +180,7 @@ begin
     Experiments := FileUtil.FindAllDirectories(txtSourceDir.Text, False);
     lstExperiments.Clear;
     for Exp in Experiments do
-      lstExperiments.AddItem(SysUtils.ExtractFileName(Exp),Sender);
+      lstExperiments.AddItem(SysUtils.ExtractFileName(Exp), Sender);
     Experiments.Free;
   end;
 end;
@@ -189,10 +195,10 @@ end;
 
 procedure TMainForm.cmdSelectDestDirClick(Sender: TObject);
 begin
-    if dlgSelectDestDir.Execute then
-    begin
-      txtDestDir.Text := dlgSelectDestDir.FileName;
-    end;
+  if dlgSelectDestDir.Execute then
+  begin
+    txtDestDir.Text := dlgSelectDestDir.FileName;
+  end;
 end;
 
 procedure TMainForm.chkSelectPlatesChange(Sender: TObject);
@@ -200,7 +206,7 @@ begin
   if groupBoxSelectPlates.Enabled then
     groupBoxSelectPlates.Enabled := False
   else
-    groupBoxSelectPlates.Enabled := True
+    groupBoxSelectPlates.Enabled := True;
 end;
 
 procedure TMainForm.cmdAbortExportClick(Sender: TObject);
@@ -220,8 +226,8 @@ begin
   txtDestDir.Enabled := True;
   if (txtDestDir.Text <> '') then
   begin
-     cmdOpenDestDir.Enabled := True;
-  end
+    cmdOpenDestDir.Enabled := True;
+  end;
 end;
 
 procedure TMainForm.cmdStartConversionClick(Sender: TObject);
@@ -242,7 +248,7 @@ begin
   if Pos(txtSourceDir.Text, txtDestDir.Text) > 0 then
   begin
     ShowMessage('The destination directory must not be placed under the ' +
-                'Source directory!');
+      'Source directory!');
     exit;
   end;
 
@@ -271,7 +277,7 @@ begin
   if chkSelectPlates.Checked and (lstPlates.SelCount = 0) then
   begin
     ShowMessage('At least one plate has to be selected, when the ' +
-                '"Select specific plates" checkbox is selected.');
+      '"Select specific plates" checkbox is selected.');
     exit;
   end;
 
@@ -284,14 +290,14 @@ begin
     end;
   except
     on E: Exception do
-      ShowMessage('Error on checking if directory is writable:' + LineEnding +
-                  txtDestDir.Text + LineEnding +
-                  'Error message: ' + E.Message);
+      ShowMessage('Error on checking if directory is writable:' +
+        LineEnding + txtDestDir.Text + LineEnding +
+        'Error message: ' + E.Message);
   end;
 
   // Destination directory must be empty
   if not ((FileUtil.FindAllDirectories(txtDestDir.Text).Count = 0) and
-         (FileUtil.FindAllFiles(txtDestDir.Text).Count = 0)) then
+    (FileUtil.FindAllFiles(txtDestDir.Text).Count = 0)) then
   begin
     ShowMessage('Destination directory is not empty!');
     exit;
@@ -301,9 +307,10 @@ begin
 
   // Retrieve the plate dirs
   plateDirs := TStringList.Create;
-  for i := 0 to lstPlates.Items.Count-1 do
+  for i := 0 to lstPlates.Items.Count - 1 do
   begin
-    if lstPlates.Selected[i] or not chkSelectPlates.Checked then // If we don't select on plates, take all the plates
+    if lstPlates.Selected[i] or not chkSelectPlates.Checked then
+      // If we don't select on plates, take all the plates
     begin
       plateDirs.AddObject(lstPlates.Items[i], lstPlates.Items.Objects[i]);
     end;
@@ -312,7 +319,8 @@ begin
   memoLog.Clear; // In case of a restart, so we don't mix up multiple things...
 
   prgbarMain.Style := pbstMarquee;
-  ConvertFolderStructure(txtSourceDir.Text, plateDirs, txtDestDir.Text, memoLog.Lines, chkAborted, Application);
+  ConvertFolderStructure(txtSourceDir.Text, plateDirs, txtDestDir.Text,
+    memoLog.Lines, chkAborted, Application);
   prgbarMain.Style := pbstNormal;
   prgbarMain.Update;
 
