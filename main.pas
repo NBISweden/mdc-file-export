@@ -5,8 +5,13 @@ unit Main;
 interface
 
 uses
+{$ifdef Darwin}
+  cthreads, Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
+  StdCtrls, ActnList, StringObject, RegExpr, LCLIntf;
+{$else}
   Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList, StringObject, RegExpr, LCLIntf;
+{$endif}
 
 type
 
