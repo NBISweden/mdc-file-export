@@ -31,7 +31,6 @@ object MainForm: TMainForm
     Enabled = False
     Font.Height = -12
     Font.Name = 'Sans'
-    OnChange = txtSourceDirectoryChange
     ParentFont = False
     ReadOnly = True
     TabOrder = 1
