@@ -6,10 +6,12 @@ interface
 
 uses
 {$ifdef Darwin}
-  cthreads;
-{$endif}
+  CThreads, Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
+  StdCtrls, ActnList, StringObject, RegExpr, LCLIntf;
+{$else}
   Classes, Convert, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, ActnList, StringObject, RegExpr, LCLIntf;
+{$endif}
 
 type
 
