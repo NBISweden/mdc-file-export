@@ -8,7 +8,7 @@ object MainForm: TMainForm
   ClientWidth = 750
   Constraints.MinHeight = 480
   Constraints.MinWidth = 320
-  LCLVersion = '1.0.10.0'
+  LCLVersion = '1.6.0.4'
   object cmdSelectSrcDir: TButton
     Left = 704
     Height = 25
