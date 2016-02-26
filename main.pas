@@ -45,7 +45,6 @@ type
     procedure cmdSelectExportDirClick(Sender: TObject);
     procedure cmdStartConversionClick(Sender: TObject);
     procedure txtExportDirChange(Sender: TObject);
-    procedure txtSourceDirectoryChange(Sender: TObject);
     procedure cmdSelectSrcDirClick(Sender: TObject);
     procedure lstExperimentsSelectionChange(Sender: TObject; User: boolean);
   private
@@ -168,11 +167,16 @@ begin
   ExperimentSubDirs.Free;
 end;
 
-procedure TMainForm.txtSourceDirectoryChange(Sender: TObject);
+procedure TMainForm.cmdSelectSrcDirClick(Sender: TObject);
 var
   Exp: string;
   Experiments: TStringList;
 begin
+  if dlgSelectSrcDir.Execute then
+  begin
+    txtSourceDir.Text := dlgSelectSrcDir.FileName;
+  end;
+
   lstExperiments.Clear;
   if SysUtils.DirectoryExists(txtSourceDir.Text) then
   begin
@@ -185,14 +189,6 @@ begin
     for Exp in Experiments do
       lstExperiments.AddItem(SysUtils.ExtractFileName(Exp), Sender);
     Experiments.Free;
-  end;
-end;
-
-procedure TMainForm.cmdSelectSrcDirClick(Sender: TObject);
-begin
-  if dlgSelectSrcDir.Execute then
-  begin
-    txtSourceDir.Text := dlgSelectSrcDir.FileName;
   end;
 end;
 
